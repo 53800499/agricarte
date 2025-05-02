@@ -11,16 +11,44 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <style>
+        .hero-carousel {
+            height: 500px;
+        }
+
+        .hero-carousel .carousel-item {
+            height: 100%;
+            position: relative;
+        }
+
+        .hero-image {
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        .carousel-caption {
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 0 20px;
+            color: white;
+        }
+
         .navbar-brand img {
             height: 40px;
         }
 
         .hero-section {
-            background-image: url('/images/slide1.jpg');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 100px 0;
             position: relative;
         }
 

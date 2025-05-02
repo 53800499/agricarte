@@ -3,20 +3,73 @@
 @section('title', 'Accueil - Produits frais des agriculteurs')
 
 @section('content')
+
     <!-- Hero Section -->
-    <section class="hero-section h-full">
-        <div class="container text-center hero-content">
-            <h1 class="display-4 fw-bold mb-4">Trouvez et achetez des produits frais directement auprès des agriculteurs
-                proches de chez vous !</h1>
-            <div class="d-flex justify-content-center gap-3 mt-4">
-                <a href="{{ route('map') }}" class="btn btn-success btn-lg">Explorer la carte</a>
-                <a href="#" class="btn btn-outline-light btn-lg">Publier un produit</a>
+    <section class="hero-section position-relative overflow-hidden">
+        <div id="carouselExampleCaptions" class="carousel slide hero-carousel" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
             </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{{ asset('images/slide2.jpg') }}" class="d-block w-100 object-fit-cover"
+                        style="height: 500px;" alt="...">
+                    <div
+                        class="carousel-caption d-flex flex-column justify-content-center align-items-center top-0 bottom-0 start-0 end-0 text-center">
+                        <h1 class="fw-bold">Trouvez et achetez des produits frais...</h1>
+                        <div class="mt-3">
+                            <a href="{{ route('map') }}" class="btn btn-success btn-lg">Explorer la carte</a>
+                            <a href="#" class="btn btn-outline-light btn-lg">Publier un produit</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('images/slide1.jpg') }}" class="d-block w-100 object-fit-cover"
+                        style="height: 500px;" alt="...">
+                    <div
+                        class="carousel-caption d-flex flex-column justify-content-center align-items-center top-0 bottom-0 start-0 end-0 text-center">
+                        <h1 class="fw-bold">Trouvez et achetez des produits frais...</h1>
+                        <div class="mt-3">
+                            <a href="{{ route('map') }}" class="btn btn-success btn-lg">Explorer la carte</a>
+                            <a href="#" class="btn btn-outline-light btn-lg">Publier un produit</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('images/slide1.jpg') }}" class="d-block w-100 object-fit-cover"
+                        style="height: 500px;" alt="...">
+                    <div
+                        class="carousel-caption d-flex flex-column justify-content-center align-items-center top-0 bottom-0 start-0 end-0 text-center">
+                        <h1 class="fw-bold">Trouvez et achetez des produits frais...</h1>
+                        <div class="mt-3">
+                            <a href="{{ route('map') }}" class="btn btn-success btn-lg">Explorer la carte</a>
+                            <a href="#" class="btn btn-outline-light btn-lg">Publier un produit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
+
     </section>
 
     <!-- Featured Products Section -->
-    <section class="py-5">
+    <section class="py-5 bg-light">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Produits mis en avant</h2>
@@ -28,10 +81,10 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                             <li><a class="dropdown-item" href="{{ route('home', ['category' => 'all']) }}">Tous</a></li>
-                            @foreach($categories as $category)
+                            @foreach ($categories as $category)
                                 <li><a class="dropdown-item" href="{{ route('home', ['category' => $category->slug]) }}">
-                                    {{ $category->name }}
-                                </a></li>
+                                        {{ $category->name }}
+                                    </a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -41,8 +94,10 @@
                             Prix <i class="fas fa-chevron-down ms-1"></i>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="priceDropdown">
-                            <li><a class="dropdown-item" href="{{ route('home', ['sort' => 'price_asc']) }}">Croissant</a></li>
-                            <li><a class="dropdown-item" href="{{ route('home', ['sort' => 'price_desc']) }}">Décroissant</a></li>
+                            <li><a class="dropdown-item" href="{{ route('home', ['sort' => 'price_asc']) }}">Croissant</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                    href="{{ route('home', ['sort' => 'price_desc']) }}">Décroissant</a></li>
                         </ul>
                     </div>
                     <div class="dropdown">
@@ -52,8 +107,10 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="distanceDropdown">
                             <li><a class="dropdown-item" href="{{ route('home', ['distance' => 5]) }}">&lt; 5 km</a></li>
-                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 10]) }}">&lt; 10 km</a></li>
-                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 20]) }}">&lt; 20 km</a></li>
+                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 10]) }}">&lt; 10 km</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 20]) }}">&lt; 20 km</a>
+                            </li>
                             <li><a class="dropdown-item" href="{{ route('home', ['distance' => 'all']) }}">Tous</a></li>
                         </ul>
                     </div>
@@ -61,26 +118,27 @@
             </div>
 
             <div class="position-relative">
-                <button class="btn btn-light position-absolute top-50 start-0 translate-middle-y rounded-circle shadow-sm"
-                    style="z-index: 1;" id="prevProduct">
+                <button class="btn btn-light position-absolute top-50 start-0 translate-middle-y shadow-sm"
+                    id="prevProduct" aria-label="Produit précédent">
                     <i class="fas fa-chevron-left"></i>
                 </button>
 
                 <div class="row" id="productsContainer">
                     @forelse($featuredProducts as $product)
                         <div class="col-md-3 col-sm-6 mb-4">
-                            <div class="card product-card h-100 border-0 shadow-sm">
-                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/products/default.jpg') }}" 
-                                    class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/products/default.jpg') }}"
+                                    class="card-img-top" alt="{{ $product->name }}"
+                                    style="height: 200px; object-fit: cover;">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ $product->name }}</h5>
-                                    <p class="card-text fw-bold">{{ number_format($product->price, 2) }}€ / {{ $product->unit }}</p>
+                                    <p class="card-text fw-bold">{{ number_format($product->price, 2) }}€ /
+                                        {{ $product->unit }}</p>
                                     <p class="text-muted small">{{ $product->user->address }}</p>
-                                    <div class="mt-3">
-                                        <a href="{{ route('products.show', $product->slug) }}" class="btn btn-outline-success btn-sm">
-                                            Voir le produit
-                                        </a>
-                                    </div>
+                                    <a href="{{ route('products.show', $product->slug) }}"
+                                        class="btn btn-outline-success btn-sm mt-2">
+                                        Voir le produit
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -91,22 +149,24 @@
                     @endforelse
                 </div>
 
-                <button class="btn btn-light position-absolute top-50 end-0 translate-middle-y rounded-circle shadow-sm"
-                    style="z-index: 1;" id="nextProduct">
+                <button class="btn btn-light position-absolute top-50 end-0 translate-middle-y shadow-sm" id="nextProduct"
+                    aria-label="Produit suivant">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
 
-            <div class="text-center mt-3">
-                <div class="d-inline-flex">
-                    @for($i = 0; $i < ceil($featuredProducts->count() / 4); $i++)
-                        <button class="btn btn-sm {{ $i === 0 ? 'btn-primary' : 'btn-outline-secondary' }} mx-1 rounded-circle pagination-dot"
-                            style="width: 12px; height: 12px; padding: 0;" data-page="{{ $i }}"></button>
+            @if ($featuredProducts->count() > 4)
+                <div class="text-center mt-3">
+                    @for ($i = 0; $i < ceil($featuredProducts->count() / 4); $i++)
+                        <button
+                            class="btn btn-sm {{ $i === 0 ? 'btn-primary' : 'btn-outline-secondary' }} mx-1 rounded-circle pagination-dot"
+                            style="width: 12px; height: 12px;" data-page="{{ $i }}"></button>
                     @endfor
                 </div>
-            </div>
+            @endif
         </div>
     </section>
+
 
     <!-- Carte Interactive Section -->
     <section class="py-5">
@@ -165,7 +225,8 @@
                                 class="img-fluid rounded mb-4" style="max-height: 230px; object-fit: cover;">
                             <div class="mb-4">
                                 <i class="fas fa-quote-left text-success fa-2x me-2 opacity-50"></i>
-                                <span class="text-muted fst-italic">Ce service est excellent! Grâce à leur professionnalisme, j'ai pu
+                                <span class="text-muted fst-italic">Ce service est excellent! Grâce à leur
+                                    professionnalisme, j'ai pu
                                     faire évoluer mon entreprise rapidement.</span>
                                 <i class="fas fa-quote-right text-success fa-2x ms-2 opacity-50"></i>
                             </div>
@@ -183,7 +244,8 @@
                                 class="img-fluid rounded mb-4" style="max-height: 230px; object-fit: cover;">
                             <div class="mb-4">
                                 <i class="fas fa-quote-left text-success fa-2x me-2 opacity-50"></i>
-                                <span class="text-muted fst-italic">Un accompagnement de qualité! Une équipe à l'écoute et des
+                                <span class="text-muted fst-italic">Un accompagnement de qualité! Une équipe à l'écoute et
+                                    des
                                     résultats à la hauteur de mes attentes.</span>
                                 <i class="fas fa-quote-right text-success fa-2x ms-2 opacity-50"></i>
                             </div>
@@ -201,7 +263,8 @@
                                 class="img-fluid rounded mb-4" style="max-height: 230px; object-fit: cover;">
                             <div class="mb-4">
                                 <i class="fas fa-quote-left text-success fa-2x me-2 opacity-50"></i>
-                                <span class="text-muted fst-italic">Une expérience incroyable! J'ai pu améliorer mes ventes et
+                                <span class="text-muted fst-italic">Une expérience incroyable! J'ai pu améliorer mes ventes
+                                    et
                                     fidéliser mes clients grâce à leur aide.</span>
                                 <i class="fas fa-quote-right text-success fa-2x ms-2 opacity-50"></i>
                             </div>
@@ -279,63 +342,64 @@
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const productsContainer = document.getElementById('productsContainer');
-        const prevButton = document.getElementById('prevProduct');
-        const nextButton = document.getElementById('nextProduct');
-        const paginationDots = document.querySelectorAll('.pagination-dot');
-        let currentPage = 0;
-        const productsPerPage = 4;
+        document.addEventListener('DOMContentLoaded', function() {
+            const productsContainer = document.getElementById('productsContainer');
+            const prevButton = document.getElementById('prevProduct');
+            const nextButton = document.getElementById('nextProduct');
+            const paginationDots = document.querySelectorAll('.pagination-dot');
+            let currentPage = 0;
+            const productsPerPage = 4;
 
-        function showProducts(page) {
-            const products = productsContainer.querySelectorAll('.col-md-3');
-            products.forEach((product, index) => {
-                if (index >= page * productsPerPage && index < (page + 1) * productsPerPage) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
+            function showProducts(page) {
+                const products = productsContainer.querySelectorAll('.col-md-3');
+                products.forEach((product, index) => {
+                    if (index >= page * productsPerPage && index < (page + 1) * productsPerPage) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+
+                // Update pagination dots
+                paginationDots.forEach((dot, index) => {
+                    if (index === page) {
+                        dot.classList.remove('btn-outline-secondary');
+                        dot.classList.add('btn-primary');
+                    } else {
+                        dot.classList.remove('btn-primary');
+                        dot.classList.add('btn-outline-secondary');
+                    }
+                });
+
+                // Update button states
+                prevButton.disabled = page === 0;
+                nextButton.disabled = page >= Math.ceil(products.length / productsPerPage) - 1;
+            }
+
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 0) {
+                    currentPage--;
+                    showProducts(currentPage);
                 }
             });
 
-            // Update pagination dots
+            nextButton.addEventListener('click', () => {
+                if (currentPage < Math.ceil(productsContainer.querySelectorAll('.col-md-3').length /
+                        productsPerPage) - 1) {
+                    currentPage++;
+                    showProducts(currentPage);
+                }
+            });
+
             paginationDots.forEach((dot, index) => {
-                if (index === page) {
-                    dot.classList.remove('btn-outline-secondary');
-                    dot.classList.add('btn-primary');
-                } else {
-                    dot.classList.remove('btn-primary');
-                    dot.classList.add('btn-outline-secondary');
-                }
+                dot.addEventListener('click', () => {
+                    currentPage = index;
+                    showProducts(currentPage);
+                });
             });
 
-            // Update button states
-            prevButton.disabled = page === 0;
-            nextButton.disabled = page >= Math.ceil(products.length / productsPerPage) - 1;
-        }
-
-        prevButton.addEventListener('click', () => {
-            if (currentPage > 0) {
-                currentPage--;
-                showProducts(currentPage);
-            }
+            // Initialize
+            showProducts(0);
         });
-
-        nextButton.addEventListener('click', () => {
-            if (currentPage < Math.ceil(productsContainer.querySelectorAll('.col-md-3').length / productsPerPage) - 1) {
-                currentPage++;
-                showProducts(currentPage);
-            }
-        });
-
-        paginationDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentPage = index;
-                showProducts(currentPage);
-            });
-        });
-
-        // Initialize
-        showProducts(0);
-    });
     </script>
 @endsection
