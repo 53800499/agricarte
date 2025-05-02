@@ -26,9 +26,10 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'in:user,farmer'],
             'terms' => ['required', 'accepted'],
-            'address' => ['required_if:role,farmer', 'string', 'max:255'],
-            'latitude' => ['required_if:role,farmer', 'numeric', 'between:-90,90'],
-            'longitude' => ['required_if:role,farmer', 'numeric', 'between:-180,180'],
+            'address' => ['required_if:role,farmer', 'string', 'max:255', 'nullable'],
+            'latitude' => ['required_if:role,farmer', 'numeric', 'between:-90,90', 'nullable'],
+            'longitude' => ['required_if:role,farmer', 'numeric', 'between:-180,180', 'nullable'],
+
         ], [
             'phone.regex' => 'Le format du numéro de téléphone est invalide.',
             'terms.accepted' => 'Vous devez accepter les conditions d\'utilisation.',
