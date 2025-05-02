@@ -3,7 +3,9 @@
 @section('title', 'Connexion')
 
 @section('sidebar')
-    <img src="{{ asset('images/logo-white.jpg') }}" alt="Logo" class="auth-image">
+    <div class="w-100 text-center">
+        <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="auth-image rounded-circle ">
+    </div>
     <h3>Bienvenue sur Agricarte</h3>
     <p>Connectez-vous pour accéder à votre espace et gérer vos produits agricoles.</p>
     <ul class="features-list mt-4">
@@ -35,14 +37,14 @@
             <label for="email" class="form-label">Adresse email</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required autofocus>
+                <input type="email" class="form-control" id="email" placeholder="eskay_dev@gmail.com" name="email" value="{{ old('email') }}" required autofocus>
             </div>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Mot de passe</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" placeholder="********" class="form-control" id="password" name="password" required>
             </div>
         </div>
         <div class="mb-3 form-check">

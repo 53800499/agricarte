@@ -72,8 +72,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <div class="">
-                    <img src="/images/logo.jpg" alt="AgriCarte Logo">
+                <div class="text-center">
+                    <img src="/images/logo.jpg" alt="AgriCarte Logo" class="rounded-circle">
                 </div>
                 <div>AgriCarte</div>
             </a>

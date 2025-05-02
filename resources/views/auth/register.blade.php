@@ -3,8 +3,9 @@
 @section('title', 'Inscription')
 
 @section('sidebar')
-    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="auth-image">
-    <h3 class="my-4">Rejoignez Agricarte</h3>
+<div class="w-100 text-center">
+        <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="auth-image rounded-circle ">
+    </div>    <h3 class="my-4">Rejoignez Agricarte</h3>
     <p>Créez votre compte pour commencer à vendre vos produits agricoles en ligne.</p>
     <ul class="benefits-list mt-4">
         <li><i class="fas fa-store"></i> Créez votre boutique en ligne</li>

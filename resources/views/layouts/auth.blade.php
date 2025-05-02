@@ -53,9 +53,8 @@
             background-color: #143728;
         }
         .auth-image {
-            width: 100%;
-            max-width: 300px;
-            margin-bottom: 30px;
+            width: 40%;
+            margin-bottom: 10px;
         }
         .features-list, .benefits-list {
             list-style: none;
@@ -78,11 +77,11 @@
         <div class="container">
             <div class="auth-card m-auto">
                 <div class="row g-0">
-                    <div class="col-md-5 auth-sidebar bg-success pb-8 align-items-center justify-content-center">
+                    <div class="col-md-5 auth-sidebar bg-success">
                         @yield('sidebar')
                     </div>
                     <div class="col-md-7">
-                        <div class="auth-form">
+                        <div class="auth-form align-items-center">
                             @yield('content')
                         </div>
                     </div>

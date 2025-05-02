@@ -35,7 +35,6 @@
 
         .logo-container {
             padding: 1rem;
-            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -45,9 +44,9 @@
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 px-0 sidebar bg-success">
-                <div class="logo-container">
+                <div class="logo-container text-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="img-fluid"
+                        <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="img-fluid rounded-circle"
                             style="max-height: 50px; margin: auto;">
                     </a>
                 </div>

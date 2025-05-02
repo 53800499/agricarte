@@ -63,16 +63,20 @@
                         @foreach($products as $product)
                         <tr>
                             <td>
-                                @if($product->image)
+                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/logo.jpg') }}" 
+                                         alt="Photo de {{ $product->name }}" 
+                                         class="rounded-circle"
+                                         width="40" height="40">
+                                {{-- @if($product->image)
                                     <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-thumbnail" style="max-width: 50px;">
-                                @else
-                                    <img src="{{ asset('images/no-image.png') }}" alt="No image" class="img-thumbnail" style="max-width: 50px;">
-                                @endif
+                                @else 
+                                    <img src="{{ asset('images/products/tomates.jpg') }}" alt="No image" class="img-thumbnail" style="max-width: 50px;">
+                                @endif--}}
                             </td>
                             <td>{{ $product->name }}</td>
                             <td>{{ Str::limit($product->description, 50) }}</td>
                             <td>{{ number_format($product->price, 2) }}€</td>
-                            <td>{{ $product->farmer->name }}</td>
+                            <td>{{ $product->user->name }}</td>
                             <td>
                                 <button class="btn btn-sm btn-primary me-2" onclick="editProduct({{ $product->id }})">
                                     <i class="fas fa-edit"></i>

@@ -72,7 +72,7 @@
                         @forelse($farmers as $farmer)
                             <tr>
                                 <td>
-                                    <img src="{{ $farmer->profile_image ? asset('storage/' . $farmer->profile_image) : asset('images/default-user.png') }}" 
+                                    <img src="{{ $farmer->profile_image ? asset('storage/' . $farmer->profile_image) : asset('images/logo.jpg') }}" 
                                          alt="Photo de {{ $farmer->name }}" 
                                          class="rounded-circle"
                                          width="40" height="40">

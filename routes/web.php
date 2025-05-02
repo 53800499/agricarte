@@ -23,8 +23,6 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 // Pages produits
 Route::get('/produits', [ProductController::class, 'index'])->name('products');
 
-// Page carte
-Route::get('/carte', [MapController::class, 'index'])->name('map');
 
 // Page contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
@@ -43,6 +41,10 @@ Route::post('/inscription', [RegisterController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Page carte
+    Route::get('/carte', [MapController::class, 'index'])->name('map');
+    
     // Routes pour les agriculteurs
     Route::get('/admin/farmers', [FarmerController::class, 'index'])->name('farmers.index');
     Route::post('/admin/farmers', [FarmerController::class, 'store'])->name('farmers.store');
