@@ -52,6 +52,15 @@
             position: relative;
         }
 
+        .hero-sections {
+            background-image: url('/images/slide1.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            position: relative;
+        }
+
         .hero-section::before {
             content: '';
             position: absolute;

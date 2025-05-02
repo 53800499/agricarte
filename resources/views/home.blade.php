@@ -127,7 +127,7 @@
                     @forelse($featuredProducts as $product)
                         <div class="col-md-3 col-sm-6 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
-                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/products/default.jpg') }}"
+                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/products/tomates.jpg') }}"
                                     class="card-img-top" alt="{{ $product->name }}"
                                     style="height: 200px; object-fit: cover;">
                                 <div class="card-body text-center">
