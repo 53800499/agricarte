@@ -6,10 +6,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\ProductControllers;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\FarmerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +41,13 @@ Route::post('/inscription', [RegisterController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
-    
+
+    Route::get('/profile/{user}', [DashboardController::class, 'showProfil'])->name('profile');
+    Route::put('/profile/{user}', [DashboardController::class, 'showProfil'])->name('profile.update');
+
     // Page carte
     Route::get('/carte', [MapController::class, 'index'])->name('map');
-    
+
     // Routes pour les agriculteurs
     Route::get('/admin/farmers', [FarmerController::class, 'index'])->name('farmers.index');
     Route::post('/admin/farmers', [FarmerController::class, 'store'])->name('farmers.store');

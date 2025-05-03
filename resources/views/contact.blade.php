@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section bg-light">
+    <section class="hero-sections bg-light">
         <div class="container text-center hero-content">
             <h1 class="display-4 fw-bold mb-4">Contactez-nous</h1>
         </div>

@@ -153,37 +153,40 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Prix</label>
-                            <div class="input-group">
+
+                        <div class="row">
+                            <div class="mb-3 col-md-4">
+                                <label for="price" class="form-label">Prix</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01"
+                                        class="form-control @error('price') is-invalid @enderror" id="price"
+                                        name="price" value="{{ old('price') }}" required>
+                                    <span class="input-group-text">€</span>
+                                    @error('price')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-md-4">
+                                <label for="stock_quantity" class="form-label">Quantité en stock</label>
                                 <input type="number" step="0.01"
-                                    class="form-control @error('price') is-invalid @enderror" id="price"
-                                    name="price" value="{{ old('price') }}" required>
-                                <span class="input-group-text">€</span>
-                                @error('price')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    class="form-control @error('stock_quantity') is-invalid @enderror" id="stock_quantity"
+                                    name="stock_quantity" value="{{ old('stock_quantity') }}">
+                                @error('stock_quantity')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="stock_quantity" class="form-label">Quantité en stock</label>
-                            <input type="number" step="0.01"
-                                class="form-control @error('stock_quantity') is-invalid @enderror" id="stock_quantity"
-                                name="stock_quantity" value="{{ old('stock_quantity') }}">
-                            @error('stock_quantity')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="unit" class="form-label">Unité</label>
-                            <input type="text" class="form-control @error('unit') is-invalid @enderror" id="unit"
-                                name="unit" value="{{ old('unit', 'kg') }}" required>
-                            @error('unit')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="unit" class="form-label">Unité</label>
+                                <input type="text" class="form-control @error('unit') is-invalid @enderror" id="unit"
+                                    name="unit" value="{{ old('unit', 'kg') }}" required>
+                                @error('unit')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div> 
 
                         <div class="mb-3">
                             <label for="category_id" class="form-label">Catégorie</label>
@@ -220,22 +223,24 @@
                             @enderror
                         </div>
 
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="is_available" name="is_available"
-                                {{ old('is_available', true) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="is_available">Disponible</label>
-                        </div>
+                        <div class="row">
+                            <div class="form-check mb-2 col-md-4">
+                                <input class="form-check-input" type="checkbox" id="is_available" name="is_available"
+                                    {{ old('is_available', true) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="is_available">Disponible</label>
+                            </div>
 
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="is_organic" name="is_organic"
-                                {{ old('is_organic') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="is_organic">Bio</label>
-                        </div>
+                            <div class="form-check mb-2 col-md-4">
+                                <input class="form-check-input" type="checkbox" id="is_organic" name="is_organic"
+                                    {{ old('is_organic') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="is_organic">Bio</label>
+                            </div>
 
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured"
-                                {{ old('is_featured') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="is_featured">À la une</label>
+                            <div class="form-check mb-2 col-md-4">
+                                <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured"
+                                    {{ old('is_featured') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="is_featured">À la une</label>
+                            </div>
                         </div>
                     </div>
 

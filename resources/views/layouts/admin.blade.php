@@ -43,11 +43,11 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 px-0 sidebar bg-success">
+            <div class="col-md-3 col-lg-2 px-0 sidebar bg-success align-content-between">
                 <div class="logo-container text-center">
                     <a href="{{ route('home') }}">
                         <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="img-fluid rounded-circle"
-                            style="max-height: 50px; margin: auto;">
+                            style="max-height: 70px; margin: auto;">
                     </a>
                 </div>
                 <ul class="nav flex-column">
@@ -74,7 +74,12 @@
                             <i class="fas fa-map-marker-alt me-2"></i> Carte Interactive
                         </a>
                     </li>
-                    <li class="nav-item mt-4">
+                    <li class="nav-item">
+                        <a href="{{ route('profile',Auth::user()->id) }}" class="nav-link {{ request()->routeIs('map') ? 'active' : '' }}">
+                            <i class="fas fa-user-alt me-2"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4 bg-danger">
                         <a href="{{ route('logout') }}" class="nav-link"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fas fa-sign-out-alt me-2"></i> Déconnexion
@@ -95,7 +100,7 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav ms-auto">
+                            <ul class="navbar-nav ms-auto py-2">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
                                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -103,8 +108,8 @@
                                         {{ Auth::user()->name }}
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        {{-- <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li> --}}
-                                        <li>{{ Auth::user()->name }}</li>
+                                        <li><a class="dropdown-item" href="{{ route('profile',Auth::user()->id) }}">Profil</a></li>
+                                        <li class="dropdown-item">{{ Auth::user()->name }}</li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>

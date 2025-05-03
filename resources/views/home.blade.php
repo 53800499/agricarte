@@ -278,6 +278,8 @@
             </div>
         </div>
     </section>
+    <section class="bg-success h-25">
+    </section>
 @endsection
 
 @section('scripts')

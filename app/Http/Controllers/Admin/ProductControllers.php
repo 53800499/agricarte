@@ -38,6 +38,7 @@ public function store(Request $request)
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'user_id' => 'required|numeric|min:0',
             'stock_quantity' => 'nullable|numeric|min:0',
             'unit' => 'required|string|max:20',
             'category_id' => 'required|exists:categories,id',
