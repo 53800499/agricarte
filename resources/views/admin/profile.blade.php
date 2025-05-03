@@ -26,9 +26,9 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <div class="justify-content-center text-center">
+                            <div class="justify-content-center text-center my-1">
                                 <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('images/logo.jpg') }}"
-                                    alt="Photo de {{ $user->name }}" class="rounded" width="150" height="150">
+                                    alt="Photo de {{ $user->name }}" class="rounded img-thumbnail" width="150" height="150">
                             </div>
                             <input type="file" class="form-control @error('profile_image') is-invalid @enderror"
                                 id="profile_image" name="profile_image" accept="image/*">
@@ -89,7 +89,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="address" class="form-label">Adresse</label>
-                            <input type="number" step="any" class="form-control @error('address') is-invalid @enderror"
+                            <input type="text" step="any" class="form-control @error('address') is-invalid @enderror"
                                 id="address" name="address" value="{{ old('address', $user->address) }}">
                             @error('address')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -116,10 +116,10 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                            name="email" value="{{ old('email', $user->email) }}" required>
-                        @error('email')
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                            rows="3" required>{{ old('description', $user->description) }}</textarea>
+                        @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

@@ -12,120 +12,239 @@ use Illuminate\Support\Facades\Log;
 
 class ProductControllers extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = Product::with('farmer');
+
+        // Filtre par recherche
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filtre par catégorie
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        // Filtre par statut
+        if ($request->has('is_available')) {
+            $query->where('is_available', $request->input('is_available'));
+        }
+
+        // Tri
+        if ($request->has('sort')) {
+            $sort = $request->input('sort');
+            switch ($sort) {
+                case 'latest':
+                    $query->latest();
+                    break;
+                case 'oldest':
+                    $query->oldest();
+                    break;
+                case 'name':
+                    $query->orderBy('name');
+                    break;
+            }
+        }
+
+        $products = $query->paginate(10);
         $categories = Category::all();
-        $products = Product::with('farmer')->latest()->get();
         $farmers = User::where('role', 'farmer')->get();
         return view('admin.products.index', compact('products', 'farmers', 'categories'));
     }
 
-public function store(Request $request)
-{
-    try {
-        // Ajouter un log pour le début de la création d'un produit
-        Log::info('Creating a new product', $request->all());
+    public function store(Request $request)
+    {
+        try {
+            // Log des données reçues
+            Log::info('Creating a new product', ['request' => $request->except('image', 'additional_images')]);
 
-        // Merge pour les cases à cocher (booléens)
-        $request->merge([
-            'is_available' => $request->has('is_available'),
-            'is_organic' => $request->has('is_organic'),
-            'is_featured' => $request->has('is_featured'),
-        ]);
-
-        // Validation des données
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'user_id' => 'required|numeric|min:0',
-            'stock_quantity' => 'nullable|numeric|min:0',
-            'unit' => 'required|string|max:20',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|max:2048', // Validation de l'image avec taille maximale
-            'additional_images.*' => 'nullable|image|max:2048', // Validation des images supplémentaires
-            'is_available' => 'nullable|boolean',
-            'is_organic' => 'nullable|boolean',
-            'is_featured' => 'nullable|boolean',
-        ]);
-
-        Log::info('Validated data:', $validated);
-
-        // Vérification et traitement de l'image principale
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-
-            // Vérifier si l'image est valide
-            if (!$image->isValid()) {
-                Log::error('Image failed validation', ['image' => $image]);
-                return response()->json([
-                    'success' => false,
-                    'message' => 'The image failed to upload. Please check the file.'
-                ], 422);
+            // Vérification de la taille des images
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                if ($image->getSize() > 10 * 1024 * 1024) { // 10MB
+                    throw new \Exception('L\'image principale ne doit pas dépasser 10MB');
+                }
             }
 
-            // Enregistrer l'image principale
-            $imagePath = $image->store('products', 'public');
-            $validated['image'] = $imagePath;
-
-            Log::info('Image uploaded successfully', ['image_path' => $imagePath]);
-        }
-
-        // Vérification et traitement des images supplémentaires
-        if ($request->hasFile('additional_images')) {
-            $additionalImages = $request->file('additional_images');
-
-            // Traiter chaque image supplémentaire
-            $additionalImagePaths = array_map(function ($file) {
-                if ($file->isValid()) {
-                    return $file->store('products/additional', 'public');
-                } else {
-                    Log::error('Additional image failed validation', ['file' => $file]);
-                    return null;
+            if ($request->hasFile('additional_images')) {
+                foreach ($request->file('additional_images') as $image) {
+                    if ($image->getSize() > 10 * 1024 * 1024) { // 10MB
+                        throw new \Exception('Les images supplémentaires ne doivent pas dépasser 10MB chacune');
+                    }
                 }
-            }, $additionalImages);
+            }
 
-            // Filtrer les images nulles (si une image n'a pas pu être téléchargée)
-            $validated['additional_images'] = json_encode(array_filter($additionalImagePaths));
-            Log::info('Additional images uploaded successfully', ['additional_images' => $validated['additional_images']]);
+            // Préparation des données booléennes
+            $request->merge([
+                'is_available' => $request->has('is_available'),
+                'is_organic' => $request->has('is_organic'),
+                'is_featured' => $request->has('is_featured'),
+            ]);
+
+            // Validation des données
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'stock_quantity' => 'required|numeric|min:0',
+                'unit' => 'required|string|max:20',
+                'category_id' => 'required|exists:categories,id',
+                'user_id' => 'required|exists:users,id',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB
+                'additional_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB
+                'is_available' => 'boolean',
+                'is_organic' => 'boolean',
+                'is_featured' => 'boolean',
+            ]);
+
+            // Créer les dossiers s'ils n'existent pas
+            if (!Storage::exists('public/products')) {
+                Storage::makeDirectory('public/products');
+            }
+            if (!Storage::exists('public/products/additional')) {
+                Storage::makeDirectory('public/products/additional');
+            }
+
+            // Traitement de l'image principale
+            $fileNameToStore = 'noimage.jpg';
+            if($request->hasFile('image')) {
+                try {
+                    $image = $request->file('image');
+                    // 1:get files name with ext
+                    $fileNameWithExt = $image->getClientOriginalName();
+                    // 2:get just files name
+                    $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+                    // 3:get just files extension
+                    $extension = $image->getClientOriginalExtension();
+                    // 4 : file name to store
+                    $fileNameToStore = $fileName.'_'.time().'.'.$extension;
+                    // 5 : uploader l'image
+                    $path = $image->storeAs('public/products', $fileNameToStore);
+
+                    Log::info('Main image uploaded successfully', [
+                        'original_name' => $fileNameWithExt,
+                        'stored_name' => $fileNameToStore,
+                        'path' => $path,
+                        'size' => $image->getSize()
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Error storing main image', [
+                        'error' => $e->getMessage(),
+                        'file' => $request->file('image')->getClientOriginalName()
+                    ]);
+                    throw $e;
+                }
+            }
+
+            // Créer le produit
+            $product = Product::create([
+                'name' => $validated['name'],
+                'slug' => $validated['name'],
+                'description' => $validated['description'],
+                'price' => $validated['price'],
+                'stock_quantity' => $validated['stock_quantity'],
+                'unit' => $validated['unit'],
+                'category_id' => $validated['category_id'],
+                'user_id' => $validated['user_id'],
+                'is_available' => $validated['is_available'],
+                'is_organic' => $validated['is_organic'],
+                'is_featured' => $validated['is_featured'],
+                'image' => $fileNameToStore
+            ]);
+
+            // Traitement des images supplémentaires
+            if ($request->hasFile('additional_images')) {
+                foreach ($request->file('additional_images') as $additionalImage) {
+                    if ($additionalImage->isValid()) {
+                        try {
+                            // 1:get files name with ext
+                            $fileNameWithExt = $additionalImage->getClientOriginalName();
+                            // 2:get just files name
+                            $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+                            // 3:get just files extension
+                            $extension = $additionalImage->getClientOriginalExtension();
+                            // 4 : file name to store
+                            $fileNameToStore = $fileName.'_'.time().'.'.$extension;
+                            // 5 : uploader l'image
+                            $path = $additionalImage->storeAs('public/products/additional', $fileNameToStore);
+
+                            $product->additionalImages()->create(['image_path' => $fileNameToStore]);
+                            Log::info('Additional image uploaded successfully', [
+                                'original_name' => $fileNameWithExt,
+                                'stored_name' => $fileNameToStore,
+                                'path' => $path,
+                                'size' => $additionalImage->getSize()
+                            ]);
+                        } catch (\Exception $e) {
+                            Log::error('Error storing additional image', [
+                                'error' => $e->getMessage(),
+                                'file' => $additionalImage->getClientOriginalName()
+                            ]);
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Produit ajouté avec succès.',
+                    'product' => $product
+                ]);
+            }
+
+            return redirect()->route('products.index')->with('success', 'Produit ajouté avec succès.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', ['errors' => $e->errors()]);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            Log::error('Error creating product', ['error' => $e->getMessage()]);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
-
-        // Créer le produit dans la base de données
-        $product = Product::create($validated);
-
-        Log::info('Product created successfully', ['product_id' => $product->id]);
-
-        // Retourner une réponse JSON avec succès
-        return response()->json([
-            'success' => true,
-            'message' => 'Product created successfully',
-            'product' => $product
-        ], 201);
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        Log::error('Validation failed', ['errors' => $e->errors()]);
-        return response()->json([
-            'success' => false,
-            'message' => 'Validation failed',
-            'errors' => $e->errors()
-        ], 422);
-    } catch (\Exception $e) {
-        Log::error('Error creating product', ['error' => $e->getMessage()]);
-        return response()->json([
-            'success' => false,
-            'message' => 'An error occurred',
-            'error' => $e->getMessage()
-        ], 500);
     }
-}
-
-
-
-
 
     public function show(Product $product)
     {
-        return response()->json($product->load('farmer'));
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'id' => $product->id,
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'stock_quantity' => $product->stock_quantity,
+                'unit' => $product->unit,
+                'category_id' => $product->category_id,
+                'category' => $product->category,
+                'image' => $product->image ? Storage::url($product->image) : null,
+                'is_available' => $product->is_available,
+                'is_organic' => $product->is_organic,
+                'is_featured' => $product->is_featured,
+                'farmer' => $product->farmer,
+                'created_at' => $product->created_at,
+                'updated_at' => $product->updated_at
+            ]);
+        }
+
+        return view('admin.products.show', compact('product'));
     }
 
     public function update(Request $request, Product $product)
@@ -136,6 +255,9 @@ public function store(Request $request)
             'price' => 'required|numeric|min:0',
             'farmer_id' => 'required|exists:users,id',
             'image' => 'nullable|image|max:2048',
+            'is_available' => 'nullable|boolean',
+            'is_organic' => 'nullable|boolean',
+            'is_featured' => 'nullable|boolean',
         ]);
 
         if ($request->hasFile('image')) {
@@ -152,7 +274,7 @@ public function store(Request $request)
 
         $product->update($validated);
 
-        return response()->json(['success' => true]);
+        return redirect()->route('products.index')->with('success', 'Produit mis à jour avec succès.');
     }
 
     public function destroy(Product $product)
@@ -163,6 +285,6 @@ public function store(Request $request)
 
         $product->delete();
 
-        return response()->json(['success' => true]);
+        return redirect()->route('products.index')->with('success', 'Produit supprimé avec succès.');
     }
 }

@@ -123,10 +123,10 @@
                     <i class="fas fa-chevron-left"></i>
                 </button>
 
-                <div class="row" id="productsContainer">
+                <div class="d-flex flex-nowrap overflow-auto gap-3" id="productsContainer">
                     @forelse($featuredProducts as $product)
                         <div class="col-md-3 col-sm-6 mb-4">
-                            <div class="card h-100 border-0 shadow-sm">
+                            <div class="card h-100 border-0 shadow-sm" style="min-width: 250px;">
                                 <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/products/tomates.jpg') }}"
                                     class="card-img-top" alt="{{ $product->name }}"
                                     style="height: 200px; object-fit: cover;">
@@ -135,19 +135,20 @@
                                     <p class="card-text fw-bold">{{ number_format($product->price, 2) }}€ /
                                         {{ $product->unit }}</p>
                                     <p class="text-muted small">{{ $product->user->address }}</p>
-                                    <a href="{{ route('products.show', $product->slug) }}"
-                                        class="btn btn-outline-success btn-sm mt-2">
+                                    <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#editProductModal" data-farmer="{{ $product->id }}">
                                         Voir le produit
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     @empty
-                        <div class="col-12 text-center">
+                        <div class="text-center w-100">
                             <p class="text-muted">Aucun produit disponible pour le moment.</p>
                         </div>
                     @endforelse
                 </div>
+
 
                 <button class="btn btn-light position-absolute top-50 end-0 translate-middle-y shadow-sm" id="nextProduct"
                     aria-label="Produit suivant">

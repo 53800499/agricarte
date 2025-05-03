@@ -72,8 +72,8 @@
                         @forelse($farmers as $farmer)
                             <tr>
                                 <td>
-                                    <img src="{{ $farmer->profile_image ? asset('storage/' . $farmer->profile_image) : asset('images/logo.jpg') }}" 
-                                         alt="Photo de {{ $farmer->name }}" 
+                                    <img src="{{ $farmer->profile_image ? asset('storage/' . $farmer->profile_image) : asset('images/logo.jpg') }}"
+                                         alt="Photo de {{ $farmer->name }}"
                                          class="rounded-circle"
                                          width="40" height="40">
                                 </td>
@@ -89,19 +89,21 @@
                                 <td>{{ $farmer->products_count }} produits</td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#editFarmerModal" 
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editFarmerModal"
                                                 data-farmer="{{ $farmer->id }}">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <a href="{{ route('farmers.show', $farmer->id) }}" 
-                                           class="btn btn-sm btn-outline-info">
+                                        <button type="button" class="btn btn-sm btn-outline-info"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewFarmerModal"
+                                                data-farmer="{{ $farmer->id }}">
                                             <i class="fas fa-eye"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteFarmerModal" 
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteFarmerModal"
                                                 data-farmer="{{ $farmer->id }}">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -198,7 +200,65 @@
     </div>
 </div>
 
-<!-- Modal Édition Agriculteur -->
+<!-- Modal Détails Agriculteur -->
+<div class="modal fade" id="viewFarmerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Détails de l'agriculteur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <img id="viewProfileImage" src="" alt="Photo de profil" class="rounded-circle" width="120" height="120">
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nom complet</label>
+                        <p id="viewName" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Email</label>
+                        <p id="viewEmail" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Téléphone</label>
+                        <p id="viewPhone" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Statut</label>
+                        <p id="viewStatus" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Adresse</label>
+                        <p id="viewAddress" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Latitude</label>
+                        <p id="viewLatitude" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Longitude</label>
+                        <p id="viewLongitude" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Description</label>
+                        <p id="viewDescription" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Nombre de produits</label>
+                        <p id="viewProductsCount" class="form-control-plaintext"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Modification Agriculteur -->
 <div class="modal fade" id="editFarmerModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -213,45 +273,44 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Nom complet</label>
-                            <input type="text" class="form-control" name="name" required>
+                            <input type="text" class="form-control" name="name" id="editName" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" required>
+                            <input type="email" class="form-control" name="email" id="editEmail" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Téléphone</label>
-                            <input type="tel" class="form-control" name="phone" required>
+                            <input type="tel" class="form-control" name="phone" id="editPhone" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Nouveau mot de passe</label>
-                            <input type="password" class="form-control" name="password">
-                            <small class="text-muted">Laissez vide pour conserver l'actuel</small>
+                            <label class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" name="password" placeholder="Laisser vide pour ne pas changer">
                         </div>
                         <div class="col-12">
                             <label class="form-label">Adresse</label>
-                            <input type="text" class="form-control" name="address" required>
+                            <input type="text" class="form-control" name="address" id="editAddress" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Latitude</label>
-                            <input type="number" step="any" class="form-control" name="latitude" required>
+                            <input type="number" step="any" class="form-control" name="latitude" id="editLatitude" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Longitude</label>
-                            <input type="number" step="any" class="form-control" name="longitude" required>
+                            <input type="number" step="any" class="form-control" name="longitude" id="editLongitude" required>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Photo de profil</label>
                             <input type="file" class="form-control" name="profile_image" accept="image/*">
-                            <small class="text-muted">Laissez vide pour conserver l'image actuelle</small>
+                            <small class="text-muted">Laisser vide pour conserver l'image actuelle</small>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Description</label>
-                            <textarea class="form-control" name="description" rows="3"></textarea>
+                            <textarea class="form-control" name="description" id="editDescription" rows="3"></textarea>
                         </div>
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="is_active" value="1">
+                                <input class="form-check-input" type="checkbox" name="is_active" id="editIsActive" value="1">
                                 <label class="form-check-label">Compte actif</label>
                             </div>
                         </div>
@@ -293,58 +352,91 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Gérer l'édition d'un agriculteur
+    // Gestion du modal de visualisation
+    const viewFarmerModal = document.getElementById('viewFarmerModal');
+    if (viewFarmerModal) {
+        viewFarmerModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const farmerId = button.getAttribute('data-farmer');
+
+            // Afficher l'indicateur de chargement
+            const modalBody = this.querySelector('.modal-body');
+            modalBody.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Chargement...</span></div></div>';
+
+            // Récupérer les données du farmer
+            fetch(`/admin/farmers/${farmerId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Mettre à jour les champs du modal
+                    document.getElementById('viewProfileImage').src = data.profile_image ? `/storage/${data.profile_image}` : '/images/logo.jpg';
+                    document.getElementById('viewName').textContent = data.name;
+                    document.getElementById('viewEmail').textContent = data.email;
+                    document.getElementById('viewPhone').textContent = data.phone;
+                    document.getElementById('viewStatus').textContent = data.is_active ? 'Actif' : 'Inactif';
+                    document.getElementById('viewAddress').textContent = data.address;
+                    document.getElementById('viewLatitude').textContent = data.latitude;
+                    document.getElementById('viewLongitude').textContent = data.longitude;
+                    document.getElementById('viewDescription').textContent = data.description;
+                    document.getElementById('viewProductsCount').textContent = data.products_count + ' produits';
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors du chargement des données.');
+                });
+        });
+    }
+
+    // Gestion du modal de modification
     const editFarmerModal = document.getElementById('editFarmerModal');
     if (editFarmerModal) {
         editFarmerModal.addEventListener('show.bs.modal', function(event) {
             const button = event.relatedTarget;
             const farmerId = button.getAttribute('data-farmer');
-            const form = this.querySelector('#editFarmerForm');
-            
+            const form = this.querySelector('form');
+
             // Mettre à jour l'action du formulaire
             form.action = `/admin/farmers/${farmerId}`;
-            
-            // Charger les données de l'agriculteur
+
+            // Afficher l'indicateur de chargement
+            const modalBody = this.querySelector('.modal-body');
+            modalBody.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Chargement...</span></div></div>';
+
+            // Récupérer les données du farmer
             fetch(`/admin/farmers/${farmerId}`)
                 .then(response => response.json())
                 .then(data => {
-                    form.querySelector('[name="name"]').value = data.name;
-                    form.querySelector('[name="email"]').value = data.email;
-                    form.querySelector('[name="phone"]').value = data.phone;
-                    form.querySelector('[name="address"]').value = data.address;
-                    form.querySelector('[name="latitude"]').value = data.latitude;
-                    form.querySelector('[name="longitude"]').value = data.longitude;
-                    form.querySelector('[name="description"]').value = data.description;
-                    form.querySelector('[name="is_active"]').checked = data.is_active;
+                    // Mettre à jour les champs du formulaire
+                    document.getElementById('editName').value = data.name;
+                    document.getElementById('editEmail').value = data.email;
+                    document.getElementById('editPhone').value = data.phone;
+                    document.getElementById('editAddress').value = data.address;
+                    document.getElementById('editLatitude').value = data.latitude;
+                    document.getElementById('editLongitude').value = data.longitude;
+                    document.getElementById('editDescription').value = data.description;
+                    document.getElementById('editIsActive').checked = data.is_active;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors du chargement des données.');
                 });
         });
     }
 
-    // Gérer la suppression d'un agriculteur
-    const deleteFarmerModal = document.getElementById('deleteFarmerModal');
-    if (deleteFarmerModal) {
-        deleteFarmerModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const farmerId = button.getAttribute('data-farmer');
-            const form = this.querySelector('#deleteFarmerForm');
-            form.action = `/admin/farmers/${farmerId}`;
-        });
-    }
-
-    // Géolocalisation automatique
-    const addressInput = document.querySelector('[name="address"]');
+    // Gestion de la géolocalisation automatique
+    const addressInput = document.getElementById('editAddress');
     if (addressInput) {
-        addressInput.addEventListener('blur', function() {
-            if (this.value) {
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.value)}`)
+        addressInput.addEventListener('change', function() {
+            const address = this.value;
+            if (address) {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.length > 0) {
-                            const form = this.closest('form');
-                            form.querySelector('[name="latitude"]').value = data[0].lat;
-                            form.querySelector('[name="longitude"]').value = data[0].lon;
+                        if (data && data[0]) {
+                            document.getElementById('editLatitude').value = data[0].lat;
+                            document.getElementById('editLongitude').value = data[0].lon;
                         }
-                    });
+                    })
+                    .catch(error => console.error('Erreur de géocodage:', error));
             }
         });
     }

@@ -49,11 +49,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/carte', [MapController::class, 'index'])->name('map');
 
     // Routes pour les agriculteurs
-    Route::get('/admin/farmers', [FarmerController::class, 'index'])->name('farmers.index');
-    Route::post('/admin/farmers', [FarmerController::class, 'store'])->name('farmers.store');
-    Route::get('/admin/farmers/{farmer}', [FarmerController::class, 'show'])->name('farmers.show');
-    Route::put('/adminfarmers/{farmer}', [FarmerController::class, 'update'])->name('farmers.update');
-    Route::delete('/adminfarmers/{farmer}', [FarmerController::class, 'destroy'])->name('farmers.destroy');
+    Route::prefix('admin')->middleware(['auth'])->group(function () {
+        Route::get('/farmers', [FarmerController::class, 'index'])->name('farmers.index');
+        Route::post('/farmers', [FarmerController::class, 'store'])->name('farmers.store');
+        Route::get('/farmers/{farmer}', [FarmerController::class, 'show'])->name('farmers.show');
+        Route::put('/farmers/{farmer}', [FarmerController::class, 'update'])->name('farmers.update');
+        Route::delete('/farmers/{farmer}', [FarmerController::class, 'destroy'])->name('farmers.destroy');
+    });
 
     // Routes pour les produits
     Route::get('/admin/ products', [ProductControllers::class, 'index'])->name('products.index');
