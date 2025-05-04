@@ -206,7 +206,7 @@ class ProductControllers extends Controller
                 ]);
             }
 
-            return redirect()->route('products.index')->with('success', 'Produit ajouté avec succès.');
+            return redirect()->route('admin.products.index')->with('success', 'Produit ajouté avec succès.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);

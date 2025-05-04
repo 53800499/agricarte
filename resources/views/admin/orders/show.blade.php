@@ -1,154 +1,133 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
-@section('title', 'Détails de la commande #' . str_pad($order->id, 6, '0', STR_PAD_LEFT))
+@section('title', 'Détails de la Commande - AgriCarte')
 
 @section('content')
-    <div class="container-fluid px-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Détails de la commande #{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</h1>
-            <a href="{{ route('orders.index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Retour à la liste
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Détails de la Commande #{{ $order->id }}</h1>
+        <div class="flex space-x-4">
+            <a href="{{ route('orders.edit', $order) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                Modifier
+            </a>
+            <a href="{{ route('orders.index') }}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
+                Retour
             </a>
         </div>
+    </div>
 
-        <div class="row g-4">
-            <div class="col-12">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">Informations de la commande</h6>
-                        <div>
-                            <form action="{{ route('orders.update', $order) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('PUT')
-                                <select name="status" class="form-select" onchange="this.form.submit()">
-                                    <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>En attente</option>
-                                    <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>En cours de traitement</option>
-                                    <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }}>Terminée</option>
-                                    <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Annulée</option>
-                                </select>
-                            </form>
-                        </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Informations de la commande -->
+        <div class="md:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Informations de la commande</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Date de commande</p>
+                        <p class="font-medium">{{ $order->created_at->format('d/m/Y H:i') }}</p>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h6 class="font-weight-bold">Informations client</h6>
-                                <p class="mb-1">{{ $order->user->name }}</p>
-                                <p class="mb-1">{{ $order->user->email }}</p>
-                                @if($order->user->phone)
-                                    <p class="mb-1">{{ $order->user->phone }}</p>
-                                @endif
-                            </div>
-
-                            <div class="col-md-4">
-                                <h6 class="font-weight-bold">Adresse de livraison</h6>
-                                <p class="mb-1">{{ $order->shipping_address }}</p>
-                            </div>
-
-                            <div class="col-md-4">
-                                <h6 class="font-weight-bold">Adresse de facturation</h6>
-                                <p class="mb-1">{{ $order->billing_address }}</p>
-                            </div>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-md-4">
-                                <h6 class="font-weight-bold">Méthode de paiement</h6>
-                                <p class="mb-1">{{ ucfirst($order->payment_method) }}</p>
-                                <p class="mb-1">
-                                    Statut :
-                                    <span class="badge
-                                        @switch($order->payment_status)
-                                            @case('completed')
-                                                bg-success
-                                                @break
-                                            @case('pending')
-                                                bg-warning
-                                                @break
-                                            @case('failed')
-                                                bg-danger
-                                                @break
-                                            @default
-                                                bg-secondary
-                                        @endswitch
-                                    ">
-                                        {{ ucfirst($order->payment_status) }}
-                                    </span>
-                                </p>
-                            </div>
-
-                            <div class="col-md-4">
-                                <h6 class="font-weight-bold">Dates</h6>
-                                <p class="mb-1">Créée le : {{ $order->created_at->format('d/m/Y H:i') }}</p>
-                                <p class="mb-1">Dernière mise à jour : {{ $order->updated_at->format('d/m/Y H:i') }}</p>
-                            </div>
-
-                            <div class="col-md-4">
-                                <h6 class="font-weight-bold">Actions</h6>
-                                <form action="{{ route('orders.destroy', $order) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger"
-                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')">
-                                        <i class="fas fa-trash"></i> Supprimer la commande
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Statut</p>
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            @if($order->status == 'pending') bg-yellow-100 text-yellow-800
+                            @elseif($order->status == 'processing') bg-blue-100 text-blue-800
+                            @elseif($order->status == 'shipped') bg-indigo-100 text-indigo-800
+                            @elseif($order->status == 'delivered') bg-green-100 text-green-800
+                            @else bg-red-100 text-red-800 @endif">
+                            {{ ucfirst($order->status) }}
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Méthode de paiement</p>
+                        <p class="font-medium">{{ ucfirst($order->payment_method) }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Montant total</p>
+                        <p class="font-medium text-lg">{{ number_format($order->total_amount, 2) }} FCFA</p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12">
-                <div class="card shadow">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Produits commandés</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Produit</th>
-                                        <th>Prix unitaire</th>
-                                        <th>Quantité</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($order->products as $product)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    @if($product->image)
-                                                        <img src="{{ asset('storage/' . $product->image) }}"
-                                                            alt="{{ $product->name }}"
-                                                            class="img-thumbnail mr-3"
-                                                            style="width: 50px; height: 50px; object-fit: cover;">
-                                                    @endif
-                                                    <div>
-                                                        <div class="font-weight-bold">{{ $product->name }}</div>
-                                                        <small class="text-muted">{{ $product->pivot->quantity }} x {{ number_format($product->pivot->price, 2, ',', ' ') }} €</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{ number_format($product->pivot->price, 2, ',', ' ') }} €</td>
-                                            <td>{{ $product->pivot->quantity }}</td>
-                                            <td>{{ number_format($product->pivot->price * $product->pivot->quantity, 2, ',', ' ') }} €</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3" class="text-right font-weight-bold">Total TTC</td>
-                                        <td class="font-weight-bold">{{ number_format($order->total, 2, ',', ' ') }} €</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
+            <!-- Produits commandés -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Produits commandés</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produit</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix unitaire</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantité</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach($order->products as $product)
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
+                                        <div class="text-sm text-gray-500">{{ $product->category->name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ number_format($product->pivot->price, 2) }} FCFA
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $product->pivot->quantity }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ number_format($product->pivot->price * $product->pivot->quantity, 2) }} FCFA
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+        <!-- Informations du client -->
+        <div>
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Informations du client</h2>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Nom</p>
+                        <p class="font-medium">{{ $order->user->name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Email</p>
+                        <p class="font-medium">{{ $order->user->email }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Téléphone</p>
+                        <p class="font-medium">{{ $order->user->phone ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adresses -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Adresses</h2>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Adresse de livraison</p>
+                        <p class="font-medium">{{ $order->shipping_address }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Adresse de facturation</p>
+                        <p class="font-medium">{{ $order->billing_address }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            @if($order->notes)
+                <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Notes</h2>
+                    <p class="text-gray-700">{{ $order->notes }}</p>
+                </div>
+            @endif
+        </div>
     </div>
+</div>
 @endsection

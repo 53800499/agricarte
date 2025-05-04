@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up(): void
     {
@@ -17,12 +19,15 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
+            // Ajout d'une contrainte unique pour éviter les doublons
             $table->unique(['user_id', 'product_id']);
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
     public function down(): void
     {

@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 mb-0 text-gray-800">Gestion des utilisateurs</h1>
-            <a href="{{ route('users.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Nouvel utilisateur
             </a>
         </div>
@@ -60,13 +60,13 @@
                                     <td>{{ $user->city ?? '-' }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('users.show', $user) }}" class="btn btn-info btn-sm">
+                                            <a href="{{ route('admin.users.show', $user) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('users.edit', $user) }}" class="btn btn-primary btn-sm">
+                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm"

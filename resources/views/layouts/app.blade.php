@@ -24,7 +24,7 @@
 
 <body class="font-sans antialiased">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
                 <img src="{{ asset('images/logo.jpg') }}" alt="AgriCarte Logo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
@@ -66,6 +66,10 @@
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2"></i>Mon profil</a></li>
                                 <li><a class="dropdown-item" href="{{ route('favorites') }}"><i class="fas fa-heart me-2"></i>Mes favoris</a></li>
                                 <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                                @if(Auth::user()->isAdmin())
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Tableau de bord</a></li>
+                                @endif
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
@@ -94,7 +98,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-5">
+    <footer class="bg-light text-dark py-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4 mb-lg-0">

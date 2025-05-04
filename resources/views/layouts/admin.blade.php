@@ -44,18 +44,41 @@
             color: var(--dark-color);
         }
 
-        .sidebar {
-            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+        .wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
             min-height: 100vh;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            color: #fff;
+            transition: all 0.3s;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .sidebar .nav-link {
             color: rgba(255,255,255,0.8);
-            padding: 0.8rem 1rem;
-            margin: 0.2rem 0;
+            padding: 0.8rem 1.5rem;
+            margin: 0.2rem 0.5rem;
             border-radius: 0.5rem;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
         }
 
         .sidebar .nav-link:hover {
@@ -73,23 +96,56 @@
         .sidebar .nav-link i {
             width: 20px;
             margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar .nav-link span {
+            font-size: 0.9rem;
+        }
+
+        .sidebar-heading {
+            padding: 1rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .main-content {
+            width: calc(100% - 250px);
+            min-height: 100vh;
+            margin-left: 250px;
+            transition: all 0.3s;
+            background-color: #F8F9FA;
         }
 
         .navbar {
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 998;
+            padding: 1rem 2rem;
         }
 
-        .navbar-brand {
-            color: var(--primary-color);
-            font-weight: 600;
+        .navbar .dropdown-toggle {
+            color: var(--dark-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar .dropdown-toggle img {
+            border: 2px solid var(--primary-color);
         }
 
         .card {
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
         }
 
         .card:hover {
@@ -100,50 +156,71 @@
         .card-header {
             background-color: #fff;
             border-bottom: 1px solid var(--border-color);
-            padding: 1rem 1.5rem;
+            padding: 1.5rem;
+            border-radius: 1rem 1rem 0 0 !important;
         }
 
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
             background-color: var(--primary-dark);
             border-color: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .btn-secondary:hover {
             background-color: var(--secondary-dark);
             border-color: var(--secondary-dark);
+            transform: translateY(-1px);
         }
 
         .table {
             background-color: #fff;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
             overflow: hidden;
+            margin-bottom: 0;
         }
 
         .table thead th {
             background-color: var(--light-color);
             border-bottom: 2px solid var(--border-color);
             font-weight: 600;
+            padding: 1rem 1.5rem;
+        }
+
+        .table tbody td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
         }
 
         .alert {
-            border-radius: 0.5rem;
+            border-radius: 1rem;
             border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-control, .form-select {
             border-radius: 0.5rem;
             border: 1px solid var(--border-color);
             padding: 0.6rem 1rem;
+            transition: all 0.3s ease;
         }
 
         .form-control:focus, .form-select:focus {
@@ -155,6 +232,7 @@
             padding: 0.5em 0.8em;
             border-radius: 0.5rem;
             font-weight: 500;
+            font-size: 0.8rem;
         }
 
         .pagination {
@@ -166,6 +244,7 @@
             border: none;
             margin: 0 2px;
             border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
         }
 
         .pagination .page-item.active .page-link {
@@ -175,46 +254,69 @@
 
         .dropdown-menu {
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0.5rem;
         }
 
         .dropdown-item {
             padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
         }
 
         .dropdown-item:hover {
             background-color: var(--light-color);
+            transform: translateX(5px);
         }
 
         .modal-content {
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
         }
 
         .modal-header {
             background-color: var(--light-color);
             border-bottom: 1px solid var(--border-color);
+            border-radius: 1rem 1rem 0 0;
+            padding: 1.5rem;
         }
 
         .toast {
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .toast-header {
             background-color: var(--light-color);
             border-bottom: 1px solid var(--border-color);
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.5rem;
         }
 
         @media (max-width: 768px) {
             .sidebar {
+                margin-left: -250px;
                 position: fixed;
-                z-index: 1000;
+                height: 100vh;
+            }
+
+            .sidebar.active {
+                margin-left: 0;
             }
 
             .main-content {
-                margin-left: 0 !important;
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .main-content.active {
+                margin-left: 250px;
+            }
+
+            .navbar {
+                padding: 1rem;
             }
         }
     </style>
@@ -223,59 +325,117 @@
 </head>
 
 <body>
-    <div class="wrapper d-flex">
+    <div class="wrapper">
         <!-- Sidebar -->
-        <div class="sidebar flex-shrink-0 p-3" style="width: 250px;">
-            <div class="d-flex align-items-center mb-4">
-                <img src="{{ asset('images/logo.png') }}" alt="Agricarte" height="40" class="me-2">
-                <span class="text-white fw-bold">Agricarte</span>
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="d-flex align-items-center justify-content-center">
+                    <img src="{{ asset('images/logo.png') }}" alt="Agricarte" height="40" class="me-2">
+                    <span class="text-white fw-bold">AgriCarte</span>
+                </div>
             </div>
-            <hr class="text-white-50">
-            <ul class="nav flex-column">
+
+            <ul class="list-unstyled components">
+                <!-- Nav Item - Dashboard -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                        <i class="fas fa-home"></i> Tableau de bord
+                    <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Tableau de bord</span>
                     </a>
                 </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Gestion
+                </div>
+
+                <!-- Nav Item - Products -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                        <i class="fas fa-shopping-basket"></i> Produits
+                    <a class="nav-link" href="{{ route('admin.products.index') }}">
+                        <i class="fas fa-fw fa-box"></i>
+                        <span>Produits</span>
                     </a>
                 </li>
+
+                @if(auth()->user()->role === 'admin')
+                <!-- Nav Item - Farmers -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('farmers.index') }}">
-                        <i class="fas fa-user-tie"></i> Agriculteurs
+                    <a class="nav-link" href="{{ route('admin.farmers.index') }}">
+                        <i class="fas fa-fw fa-user-tie"></i>
+                        <span>Agriculteurs</span>
                     </a>
                 </li>
+
+                <!-- Nav Item - Categories -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
-                        <i class="fas fa-tags"></i> Catégories
+                    <a class="nav-link" href="{{ route('admin.categories.index') }}">
+                        <i class="fas fa-fw fa-tags"></i>
+                        <span>Catégories</span>
                     </a>
                 </li>
+
+                <!-- Nav Item - Orders -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}" href="{{ route('orders.index') }}">
-                        <i class="fas fa-shopping-cart"></i> Commandes
+                    <a class="nav-link" href="{{ route('admin.orders.index') }}">
+                        <i class="fas fa-fw fa-shopping-cart"></i>
+                        <span>Commandes</span>
                     </a>
                 </li>
+
+                <!-- Nav Item - Users -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                        <i class="fas fa-users"></i> Utilisateurs
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Utilisateurs</span>
                     </a>
                 </li>
+                @endif
+
+                @if(auth()->user()->role === 'farmer')
+                <!-- Nav Item - Farmer Orders -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="{{ route('settings.index') }}">
-                        <i class="fas fa-cog"></i> Paramètres
+                    <a class="nav-link" href="{{ route('farmer.orders.index') }}">
+                        <i class="fas fa-fw fa-shopping-cart"></i>
+                        <span>Mes Commandes</span>
+                    </a>
+                </li>
+                @endif
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Mon compte
+                </div>
+
+                <!-- Nav Item - Profile -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('profile') }}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>Profil</span>
+                    </a>
+                </li>
+
+                <!-- Nav Item - Settings -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('settings') }}">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Paramètres</span>
                     </a>
                 </li>
             </ul>
-        </div>
+        </nav>
 
         <!-- Main Content -->
-        <div class="main-content flex-grow-1">
+        <div class="main-content">
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
-                    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar">
+                    <button class="btn btn-link d-lg-none" type="button" id="sidebarCollapse">
                         <i class="fas fa-bars"></i>
                     </button>
 
@@ -322,14 +482,27 @@
 
     <!-- Custom Scripts -->
     <script>
-        // Active sidebar item
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll('.nav-link');
+        // Toggle sidebar on mobile
+        $(document).ready(function() {
+            $('#sidebarCollapse').on('click', function() {
+                $('.sidebar').toggleClass('active');
+                $('.main-content').toggleClass('active');
+            });
 
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
+            // Active sidebar item
+            const currentPath = window.location.pathname;
+            $('.nav-link').each(function() {
+                if ($(this).attr('href') === currentPath) {
+                    $(this).addClass('active');
+                }
+            });
+
+            // Smooth scroll for dropdown items
+            $('.dropdown-item').on('click', function(e) {
+                e.preventDefault();
+                const target = $(this).attr('href');
+                if (target) {
+                    window.location.href = target;
                 }
             });
         });

@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des produits')
+@section('title', 'Gestion des Produits')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid px-4">
         @foreach (['success', 'info', 'warning', 'danger'] as $msg)
             @if (session($msg))
                 <div class="alert alert-{{ $msg }} alert-dismissible fade show" role="alert">
@@ -14,99 +14,155 @@
         @endforeach
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Gestion des produits</h1>
-            <a href="{{ route('products.create') }}" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i>Ajouter un produit
+            <h1 class="h3 mb-0 text-gray-800">Gestion des Produits</h1>
+            <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Ajouter un produit
             </a>
         </div>
 
         <!-- Filtres -->
-        <div class="card shadow-sm mb-4">
+        <div class="card shadow mb-4">
             <div class="card-body">
-                <form action="{{ route('products.index') }}" method="GET" class="row g-3">
+                <form action="{{ route('admin.products.index') }}" method="GET" class="row g-3">
                     <div class="col-md-3">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            <input type="text" class="form-control" name="search" placeholder="Rechercher..."
-                                value="{{ request('search') }}">
-                        </div>
+                        <label for="search" class="form-label">Recherche</label>
+                        <input type="text" class="form-control" id="search" name="search"
+                               value="{{ request('search') }}" placeholder="Nom, description...">
                     </div>
+
                     <div class="col-md-3">
-                        <select class="form-select" name="status">
+                        <label for="category" class="form-label">Catégorie</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="">Toutes les catégories</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}"
+                                        {{ request('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    @if(auth()->user()->role === 'admin')
+                    <div class="col-md-3">
+                        <label for="farmer" class="form-label">Producteur</label>
+                        <select class="form-select" id="farmer" name="farmer">
+                            <option value="">Tous les producteurs</option>
+                            @foreach($farmers as $farmer)
+                                <option value="{{ $farmer->id }}"
+                                        {{ request('farmer') == $farmer->id ? 'selected' : '' }}>
+                                    {{ $farmer->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
+
+                    <div class="col-md-3">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" name="status">
                             <option value="">Tous les statuts</option>
-                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Actif</option>
-                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Inactif</option>
+                            <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Actif</option>
+                            <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inactif</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <select class="form-select" name="sort">
-                            <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Plus récents</option>
-                            <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Plus anciens</option>
-                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nom (A-Z)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-filter me-2"></i>Filtrer
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-filter"></i> Filtrer
                         </button>
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Réinitialiser
+                        </a>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div class="card shadow">
+        <!-- Liste des produits -->
+        <div class="card shadow mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Image</th>
                                 <th>Nom</th>
-                                <th>Description</th>
+                                <th>Catégorie</th>
+                                @if(auth()->user()->role === 'admin')
+                                    <th>Producteur</th>
+                                @endif
                                 <th>Prix</th>
-                                <th>Agriculteur</th>
+                                <th>Stock</th>
+                                <th>Statut</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (!$products->isEmpty())
-                                @foreach ($products as $product)
-                                    <tr>
-                                        <td>
-                                            <img src="{{ $product->image ? asset('storage/products/' . $product->image) : asset('images/logo.jpg') }}"
-                                                alt="Photo de {{ $product->name }}" class="rounded-circle" width="40"
-                                                height="40">
-                                        </td>
-                                        <td>{{ $product->name }}</td>
-                                        <td>{{ Str::limit($product->description, 50) }}</td>
-                                        <td>{{ number_format($product->price, 2) }}€</td>
-                                        <td>{{ $product->user->name }}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-info">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
+                            @forelse($products as $product)
                                 <tr>
-                                    <td colspan="6" class="text-center">Aucun produit trouvé</td>
+                                    <td>
+                                        @if($product->image)
+                                            <img src="{{ asset('storage/' . $product->image) }}"
+                                                 alt="{{ $product->name }}"
+                                                 class="img-thumbnail"
+                                                 style="width: 50px; height: 50px; object-fit: cover;">
+                                        @else
+                                            <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                                                 style="width: 50px; height: 50px;">
+                                                <i class="fas fa-image text-white"></i>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->category->name }}</td>
+                                    @if(auth()->user()->role === 'admin')
+                                        <td>{{ $product->farmer->name }}</td>
+                                    @endif
+                                    <td>{{ number_format($product->price, 2, ',', ' ') }} €</td>
+                                    <td>{{ $product->stock }}</td>
+                                    <td>
+                                        <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $product->is_active ? 'Actif' : 'Inactif' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{{ route('admin.products.show', $product) }}"
+                                               class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.products.edit', $product) }}"
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form action="{{ route('admin.products.destroy', $product) }}"
+                                                  method="POST"
+                                                  class="d-inline"
+                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
-                            @endif
+                            @empty
+                                <tr>
+                                    <td colspan="{{ auth()->user()->role === 'admin' ? '8' : '7' }}" class="text-center">
+                                        Aucun produit trouvé
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $products->links() }}
                 </div>
             </div>
         </div>

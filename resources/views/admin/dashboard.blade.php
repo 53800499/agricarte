@@ -3,45 +3,25 @@
 @section('title', 'Tableau de bord')
 
 @section('content')
-    <div class="container-fluid px-4">
-        <!-- En-tête -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Tableau de bord</h1>
-            <div class="d-flex gap-2">
-                <a href="{{ route('products.create') }}" class="btn btn-success">
-                    <i class="fas fa-plus"></i> Nouveau produit
-                </a>
-            </div>
+            <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Ajouter un produit
+            </a>
         </div>
 
-        <!-- Statistiques -->
-        <div class="row g-4 mb-4">
-            <!-- Commandes -->
-            <div class="col-xl-3 col-md-6">
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Earnings (Monthly) Card -->
+            <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Commandes du jour</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $todayOrders }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produits -->
-            <div class="col-xl-3 col-md-6">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Total Produits</div>
+                                    Produits</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalProducts }}</div>
                             </div>
                             <div class="col-auto">
@@ -52,15 +32,51 @@
                 </div>
             </div>
 
-            <!-- Clients -->
-            <div class="col-xl-3 col-md-6">
+            <!-- Earnings (Monthly) Card -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Commandes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalOrders }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card -->
+            <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                    Total Clients</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalCustomers }}</div>
+                                    Agriculteurs</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalFarmers }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-tie fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests Card -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Utilisateurs</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalUsers }}</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -69,137 +85,84 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Revenus -->
-            <div class="col-xl-3 col-md-6">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Revenus du mois</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($monthlyRevenue, 2, ',', ' ') }} €</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-euro-sign fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Graphiques et tableaux -->
-        <div class="row g-4">
-            <!-- Graphique des ventes -->
-            <div class="col-xl-8">
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">Évolution des ventes</h6>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="salesPeriod" data-bs-toggle="dropdown">
-                                Ce mois
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Cette semaine</a></li>
-                                <li><a class="dropdown-item" href="#">Ce mois</a></li>
-                                <li><a class="dropdown-item" href="#">Cette année</a></li>
-                            </ul>
-                        </div>
+                    <!-- Card Header -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Commandes récentes</h6>
+                        <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-primary">Voir tout</a>
                     </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="salesChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produits les plus vendus -->
-            <div class="col-xl-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Produits les plus vendus</h6>
-                    </div>
+                    <!-- Card Body -->
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-sm">
+                            <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Produit</th>
-                                        <th>Ventes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($topProducts as $product)
-                                        <tr>
-                                            <td>{{ $product->name }}</td>
-                                            <td>{{ $product->total_sales }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dernières commandes -->
-            <div class="col-12">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">Dernières commandes</h6>
-                        <a href="{{ route('orders.index') }}" class="btn btn-sm btn-primary">Voir toutes</a>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>N° Commande</th>
+                                        <th>ID</th>
                                         <th>Client</th>
-                                        <th>Date</th>
                                         <th>Total</th>
                                         <th>Statut</th>
+                                        <th>Date</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($recentOrders as $order)
+                                    @forelse($recentOrders as $order)
                                         <tr>
-                                            <td>#{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</td>
+                                            <td>#{{ $order->id }}</td>
                                             <td>{{ $order->user->name }}</td>
-                                            <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                             <td>{{ number_format($order->total, 2, ',', ' ') }} €</td>
                                             <td>
-                                                <span class="badge
-                                                    @switch($order->status)
-                                                        @case('completed')
-                                                            bg-success
-                                                            @break
-                                                        @case('processing')
-                                                            bg-info
-                                                            @break
-                                                        @case('pending')
-                                                            bg-warning
-                                                            @break
-                                                        @case('cancelled')
-                                                            bg-danger
-                                                            @break
-                                                    @endswitch
-                                                ">
+                                                <span class="badge bg-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning' : 'info') }}">
                                                     {{ ucfirst($order->status) }}
                                                 </span>
                                             </td>
+                                            <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                             <td>
-                                                <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-info">
+                                                <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-info">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center">Aucune commande récente</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Statistiques des produits</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <canvas id="productChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-primary"></i> En stock
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-success"></i> Vendu
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-info"></i> En attente
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -211,28 +174,36 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Graphique des ventes
-    const ctx = document.getElementById('salesChart').getContext('2d');
-    const salesChart = new Chart(ctx, {
-        type: 'line',
+    // Product Statistics Chart
+    const ctx = document.getElementById('productChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
         data: {
-            labels: {!! json_encode($salesData['labels']) !!},
+            labels: ['En stock', 'Vendu', 'En attente'],
             datasets: [{
-                label: 'Ventes',
-                data: {!! json_encode($salesData['values']) !!},
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
+                data: [{{ $productsInStock }}, {{ $productsSold }}, {{ $productsPending }}],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
         },
         options: {
-            responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+            },
+            legend: {
+                display: false
+            },
+            cutoutPercentage: 80,
+        },
     });
 </script>
 @endpush

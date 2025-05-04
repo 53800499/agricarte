@@ -186,4 +186,9 @@ class FarmerController extends Controller
 
         return redirect()->route('farmers.index')->with('success', 'Agriculteur supprimé avec succès.');
     }
+
+    public function create()
+    {
+        return view('admin.farmers.create');
+    }
 }

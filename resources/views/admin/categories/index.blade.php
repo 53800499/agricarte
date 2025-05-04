@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 mb-0 text-gray-800">Gestion des catégories</h1>
-            <a href="{{ route('categories.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-2"></i>Nouvelle catégorie
             </a>
         </div>
@@ -54,13 +54,13 @@
                                     <td>{{ $category->products->count() }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('categories.show', $category) }}" class="btn btn-info btn-sm">
+                                            <a href="{{ route('admin.categories.show', $category) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('categories.edit', $category) }}" class="btn btn-primary btn-sm">
+                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('categories.destroy', $category) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm"

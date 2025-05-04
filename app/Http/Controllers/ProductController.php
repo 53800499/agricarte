@@ -3,74 +3,69 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = [
-            [
-                'id' => 1,
-                'name' => 'Laitue',
-                'image' => 'images/products/tomates.jpg',
-                'price' => '2.50',
-                'unit' => 'pièce',
-                'producer' => 'Ferme des Oliviers',
-                'category' => 'Légumes'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Tomate',
-                'image' => 'images/products/tomates.jpg',
-                'price' => '3.20',
-                'unit' => 'kg',
-                'producer' => 'Jardins de Provence',
-                'category' => 'Légumes'
-            ],
-            [
-                'id' => 3,
-                'name' => 'Oignon rouge',
-                'image' => 'images/products/tomates.jpg',
-                'price' => '2.80',
-                'unit' => 'kg',
-                'producer' => 'Potager Bio',
-                'category' => 'Légumes'
-            ],
-            [
-                'id' => 4,
-                'name' => 'Pomme verte',
-                'image' => 'images/products/tomates.jpg',
-                'price' => '3.50',
-                'unit' => 'kg',
-                'producer' => 'Vergers du Sud',
-                'category' => 'Fruits'
-            ],
-            [
-                'id' => 5,
-                'name' => 'Carottes',
-                'image' => 'images/products/tomates.jpg',
-                'price' => '2.30',
-                'unit' => 'kg',
-                'producer' => 'Ferme des Oliviers',
-                'category' => 'Légumes'
-            ],
-            [
-                'id' => 6,
-                'name' => 'Pomme de terre',
-                'image' => 'images/products/tomates.jpg',
-                'price' => '1.90',
-                'unit' => 'kg',
-                'producer' => 'Potager Bio',
-                'category' => 'Légumes'
-            ]
-        ];
+        $query = Product::with(['category', 'images', 'farmer']);
 
-        $categories = ['Tous', 'Légumes', 'Fruits', 'Produits laitiers', 'Viandes'];
+        // Si l'utilisateur est un agriculteur, ne montrer que ses produits
+        if (auth()->user()->role === 'farmer') {
+            $query->where('farmer_id', auth()->id());
+        }
 
-        return view('products', compact('products', 'categories'));
+        // Filtre par catégorie
+        if ($request->has('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Filtre par prix
+        if ($request->has('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Filtre par recherche
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Tri
+        if ($request->has('sort')) {
+            $sort = $request->sort;
+            switch ($sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'name':
+                    $query->orderBy('name');
+                    break;
+                case 'latest':
+                    $query->latest();
+                    break;
+            }
+        }
+
+        $products = $query->paginate(12);
+        $categories = Category::all();
+
+        return view('products.index', compact('products', 'categories'));
     }
-    
+
     public function indexs()
     {
         return Product::with('farmer:id,name')->get()->map(function ($product) {
@@ -85,55 +80,122 @@ class ProductController extends Controller
         });
     }
 
+    public function create()
+    {
+        // Vérifier si l'utilisateur est un agriculteur
+        if (auth()->user()->role !== 'farmer') {
+            abort(403, 'Accès non autorisé');
+        }
+
+        $categories = Category::all();
+        return view('admin.products.create', compact('categories'));
+    }
+
     public function store(Request $request)
     {
+        // Vérifier si l'utilisateur est un agriculteur
+        if (auth()->user()->role !== 'farmer') {
+            abort(403, 'Accès non autorisé');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'farmer_id' => 'required|exists:users,id',
-            'image' => 'nullable|image|max:2048',
+            'unit' => 'required|string|max:50',
+            'category_id' => 'required|exists:categories,id',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_active' => 'boolean'
         ]);
 
-        $product = Product::create($validated);
+        $product = Product::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'unit' => $validated['unit'],
+            'category_id' => $validated['category_id'],
+            'farmer_id' => auth()->id(),
+            'is_active' => $validated['is_active'] ?? true
+        ]);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $product->update(['image' => $path]);
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('products', 'public');
+                $product->images()->create(['path' => $path]);
+            }
         }
 
-        return response()->json($product, 201);
+        return redirect()->route('farmer.products.index')->with('success', 'Produit créé avec succès.');
     }
 
     public function show(Product $product)
     {
-        return $product->load('farmer:id,name');
+        $product->load(['category', 'images', 'farmer']);
+        return view('products.show', compact('product'));
+    }
+
+    public function edit(Product $product)
+    {
+        // Vérifier si l'utilisateur est l'agriculteur propriétaire du produit
+        if (auth()->user()->role === 'farmer' && $product->farmer_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé');
+        }
+
+        $categories = Category::all();
+        return view('products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product)
     {
+        // Vérifier si l'utilisateur est l'agriculteur propriétaire du produit
+        if (auth()->user()->role === 'farmer' && $product->farmer_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'farmer_id' => 'required|exists:users,id',
-            'image' => 'nullable|image|max:2048',
+            'unit' => 'required|string|max:50',
+            'category_id' => 'required|exists:categories,id',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_active' => 'boolean'
         ]);
 
-        $product->update($validated);
+        $product->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'unit' => $validated['unit'],
+            'category_id' => $validated['category_id'],
+            'is_active' => $validated['is_active'] ?? $product->is_active
+        ]);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $product->update(['image' => $path]);
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('products', 'public');
+                $product->images()->create(['path' => $path]);
+            }
         }
 
-        return response()->json($product);
+        return redirect()->route('farmer.products.index')->with('success', 'Produit mis à jour avec succès.');
     }
 
     public function destroy(Product $product)
     {
-        $product->delete();
-        return response()->json(null, 204);
-    }
+        // Vérifier si l'utilisateur est l'agriculteur propriétaire du produit
+        if (auth()->user()->role === 'farmer' && $product->farmer_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé');
+        }
 
+        // Supprimer les images associées
+        foreach ($product->images as $image) {
+            Storage::disk('public')->delete($image->path);
+            $image->delete();
+        }
+
+        $product->delete();
+
+        return redirect()->route('farmer.products.index')->with('success', 'Produit supprimé avec succès.');
+    }
 }

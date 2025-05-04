@@ -24,10 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
-            $table->dropColumn('profile_image');
-            $table->dropColumn('description');
-            $table->dropColumn('is_active');
-            $table->dropColumn('last_login_at');
             $table->rememberToken();
             $table->timestamps();
         });

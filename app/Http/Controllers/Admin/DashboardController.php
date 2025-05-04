@@ -16,35 +16,15 @@ class DashboardController extends Controller
     public function index()
     {
         // Statistiques de base
-        $todayOrders = Order::whereDate('created_at', today())->count();
+        $totalOrders = Order::count();
         $totalProducts = Product::count();
-        $totalCustomers = User::where('role', 'customer')->count();
-        $monthlyRevenue = Order::whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-            ->where('status', 'completed')
-            ->sum('total');
+        $totalFarmers = User::where('role', 'farmer')->count();
+        $totalUsers = User::where('role', 'customer')->count();
 
-        // Données pour le graphique des ventes (30 derniers jours)
-        $salesData = [
-            'labels' => [],
-            'values' => []
-        ];
-
-        for ($i = 29; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $salesData['labels'][] = $date->format('d/m');
-            $salesData['values'][] = Order::whereDate('created_at', $date)
-                ->where('status', 'completed')
-                ->sum('total');
-        }
-
-        // Produits les plus vendus
-        $topProducts = Product::withCount(['orders as total_sales' => function($query) {
-            $query->where('status', 'completed');
-        }])
-        ->orderByDesc('total_sales')
-        ->take(5)
-        ->get();
+        // Statistiques des produits
+        $productsInStock = Product::where('is_available', true)->count();
+        $productsSold = Order::where('status', 'completed')->sum('total');
+        $productsPending = Product::where('is_available', false)->count();
 
         // Dernières commandes
         $recentOrders = Order::with('user')
@@ -53,12 +33,13 @@ class DashboardController extends Controller
             ->get();
 
         return view('admin.dashboard', compact(
-            'todayOrders',
+            'totalOrders',
             'totalProducts',
-            'totalCustomers',
-            'monthlyRevenue',
-            'salesData',
-            'topProducts',
+            'totalFarmers',
+            'totalUsers',
+            'productsInStock',
+            'productsSold',
+            'productsPending',
             'recentOrders'
         ));
     }
