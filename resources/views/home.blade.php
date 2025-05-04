@@ -1,408 +1,339 @@
 @extends('layouts.app')
 
-@section('title', 'Accueil - Produits frais des agriculteurs')
+@section('title', 'Accueil')
+
+@push('styles')
+<style>
+    .hero-section {
+        min-height: 100vh;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/hero-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        display: flex;
+        align-items: center;
+        color: white;
+        margin-top: -76px;
+    }
+
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(40, 167, 69, 0.1);
+        border-radius: 50%;
+        margin: 0 auto 20px;
+    }
+
+    .product-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .category-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(40, 167, 69, 0.9);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+
+    .testimonial-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        background: #f8f9fa;
+    }
+
+    .testimonial-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto;
+    }
+
+    .newsletter-section {
+        background: linear-gradient(rgba(40, 167, 69, 0.9), rgba(40, 167, 69, 0.9)), url('/images/newsletter-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+
+    .newsletter-form .form-control {
+        border: none;
+        border-radius: 30px;
+        padding: 15px 25px;
+    }
+
+    .newsletter-form .btn {
+        border-radius: 30px;
+        padding: 15px 30px;
+    }
+</style>
+@endpush
 
 @section('content')
-
     <!-- Hero Section -->
-    <section class="hero-section position-relative overflow-hidden">
-        <div id="carouselExampleCaptions" class="carousel slide hero-carousel" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{{ asset('images/slide2.jpg') }}" class="d-block w-100 object-fit-cover"
-                        style="height: 500px;" alt="...">
-                    <div
-                        class="carousel-caption d-flex flex-column justify-content-center align-items-center top-0 bottom-0 start-0 end-0 text-center">
-                        <h1 class="fw-bold">Trouvez et achetez des produits frais...</h1>
-                        <div class="mt-3">
-                            <a href="{{ route('map') }}" class="btn btn-success btn-lg">Explorer la carte</a>
-                            <a href="#" class="btn btn-outline-light btn-lg">Publier un produit</a>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ asset('images/slide1.jpg') }}" class="d-block w-100 object-fit-cover"
-                        style="height: 500px;" alt="...">
-                    <div
-                        class="carousel-caption d-flex flex-column justify-content-center align-items-center top-0 bottom-0 start-0 end-0 text-center">
-                        <h1 class="fw-bold">Trouvez et achetez des produits frais...</h1>
-                        <div class="mt-3">
-                            <a href="{{ route('map') }}" class="btn btn-success btn-lg">Explorer la carte</a>
-                            <a href="#" class="btn btn-outline-light btn-lg">Publier un produit</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ asset('images/slide1.jpg') }}" class="d-block w-100 object-fit-cover"
-                        style="height: 500px;" alt="...">
-                    <div
-                        class="carousel-caption d-flex flex-column justify-content-center align-items-center top-0 bottom-0 start-0 end-0 text-center">
-                        <h1 class="fw-bold">Trouvez et achetez des produits frais...</h1>
-                        <div class="mt-3">
-                            <a href="{{ route('map') }}" class="btn btn-success btn-lg">Explorer la carte</a>
-                            <a href="#" class="btn btn-outline-light btn-lg">Publier un produit</a>
-                        </div>
+    <section class="hero-section" style="background-image: url('{{ asset('images/hero-bg.jpg') }}');">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 hero-content animate-on-scroll">
+                    <h1 class="display-4 fw-bold mb-4">Découvrez les produits frais de nos agriculteurs locaux</h1>
+                    <p class="lead mb-5">Connectez-vous directement avec les producteurs de votre région et profitez de produits frais et de qualité.</p>
+                    <div class="d-flex gap-3">
+                        <a href="{{ route('products') }}" class="btn btn-success btn-lg">
+                            <i class="fas fa-shopping-basket me-2"></i>Voir les produits
+                        </a>
+                        <a href="{{ route('map') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-map-marker-alt me-2"></i>Explorer la carte
+                        </a>
                     </div>
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
+    </section>
 
+    <!-- Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Pourquoi choisir AgriCarte ?</h2>
+                <p class="lead text-muted">Une expérience unique pour soutenir l'agriculture locale</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf fa-2x text-success"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Produits frais</h3>
+                        <p class="text-muted">Accédez à des produits frais et de saison, directement des producteurs locaux.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-truck fa-2x text-success"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Circuit court</h3>
+                        <p class="text-muted">Réduisez les intermédiaires et soutenez l'économie locale.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate fa-2x text-success"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Qualité garantie</h3>
+                        <p class="text-muted">Des produits de qualité, cultivés dans le respect de l'environnement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Featured Products Section -->
     <section class="py-5 bg-light">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Produits mis en avant</h2>
-                <div class="d-flex gap-3">
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
-                            id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Catégorie <i class="fas fa-chevron-down ms-1"></i>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                            <li><a class="dropdown-item" href="{{ route('home', ['category' => 'all']) }}">Tous</a></li>
-                            @foreach ($categories as $category)
-                                <li><a class="dropdown-item" href="{{ route('home', ['category' => $category->slug]) }}">
-                                        {{ $category->name }}
-                                    </a></li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="priceDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Prix <i class="fas fa-chevron-down ms-1"></i>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="priceDropdown">
-                            <li><a class="dropdown-item" href="{{ route('home', ['sort' => 'price_asc']) }}">Croissant</a>
-                            </li>
-                            <li><a class="dropdown-item"
-                                    href="{{ route('home', ['sort' => 'price_desc']) }}">Décroissant</a></li>
-                        </ul>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
-                            id="distanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Distance <i class="fas fa-chevron-down ms-1"></i>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="distanceDropdown">
-                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 5]) }}">&lt; 5 km</a></li>
-                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 10]) }}">&lt; 10 km</a>
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 20]) }}">&lt; 20 km</a>
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('home', ['distance' => 'all']) }}">Tous</a></li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Produits à la une</h2>
+                <p class="lead text-muted">Découvrez nos meilleurs produits du moment</p>
             </div>
-
-            <div class="position-relative">
-                <button class="btn btn-light position-absolute top-50 start-0 translate-middle-y shadow-sm"
-                    id="prevProduct" aria-label="Produit précédent">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-
-                <div class="d-flex flex-nowrap overflow-auto gap-3" id="productsContainer">
-                    @forelse($featuredProducts as $product)
-                        <div class="col-md-3 col-sm-6 mb-4">
-                            <div class="card h-100 border-0 shadow-sm" style="min-width: 250px;">
-                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/products/tomates.jpg') }}"
-                                    class="card-img-top" alt="{{ $product->name }}"
-                                    style="height: 200px; object-fit: cover;">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">{{ $product->name }}</h5>
-                                    <p class="card-text fw-bold">{{ number_format($product->price, 2) }}€ /
-                                        {{ $product->unit }}</p>
-                                    <p class="text-muted small">{{ $product->user->address }}</p>
-                                    <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
-                                        data-bs-target="#editProductModal" data-farmer="{{ $product->id }}">
-                                        Voir le produit
-                                    </button>
+            <div class="row g-4">
+                @foreach($featuredProducts as $product)
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="card product-card h-100">
+                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
+                        <div class="category-badge">{{ $product->category->name }}</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $product->name }}</h5>
+                            <p class="card-text text-muted">{{ Str::limit($product->description, 100) }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0 text-success">{{ number_format($product->price, 2) }} €</span>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('products.show', $product) }}" class="btn btn-outline-success">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <form action="{{ route('cart.add', $product) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('favorites.toggle', $product) }}" class="btn btn-outline-danger favorite-toggle">
+                                        <i class="{{ auth()->check() && auth()->user()->favorites->contains($product) ? 'fas' : 'far' }} fa-heart"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    @empty
-                        <div class="text-center w-100">
-                            <p class="text-muted">Aucun produit disponible pour le moment.</p>
-                        </div>
-                    @endforelse
+                    </div>
                 </div>
-
-
-                <button class="btn btn-light position-absolute top-50 end-0 translate-middle-y shadow-sm" id="nextProduct"
-                    aria-label="Produit suivant">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+                @endforeach
             </div>
-
-            @if ($featuredProducts->count() > 4)
-                <div class="text-center mt-3">
-                    @for ($i = 0; $i < ceil($featuredProducts->count() / 4); $i++)
-                        <button
-                            class="btn btn-sm {{ $i === 0 ? 'btn-primary' : 'btn-outline-secondary' }} mx-1 rounded-circle pagination-dot"
-                            style="width: 12px; height: 12px;" data-page="{{ $i }}"></button>
-                    @endfor
-                </div>
-            @endif
-        </div>
-    </section>
-
-
-    <!-- Carte Interactive Section -->
-    <section class="py-5">
-        <div class="container">
-            <h2 class="mb-4">Carte interactive</h2>
-            <div class="card shadow-sm">
-                <div class="card-body p-0">
-                    <div id="map-home" style="height: 400px; width: 100%;"></div>
-                </div>
+            <div class="text-center mt-5">
+                <a href="{{ route('products') }}" class="btn btn-success btn-lg">
+                    Voir tous les produits <i class="fas fa-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- How It Works Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Comment ça marche ?</h2>
+                <p class="lead text-muted">Découvrez nos produits en quelques étapes simples</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="text-center">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-search fa-2x text-success"></i>
+                        </div>
+                        <h3 class="h4 mb-3">1. Trouvez un producteur</h3>
+                        <p class="text-muted">Utilisez notre carte interactive pour trouver les producteurs près de chez vous.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="text-center">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-shopping-basket fa-2x text-success"></i>
+                        </div>
+                        <h3 class="h4 mb-3">2. Choisissez vos produits</h3>
+                        <p class="text-muted">Parcourez le catalogue de produits et ajoutez-les à votre panier.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="text-center">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-truck fa-2x text-success"></i>
+                        </div>
+                        <h3 class="h4 mb-3">3. Recevez vos produits</h3>
+                        <p class="text-muted">Récupérez vos produits directement chez le producteur ou optez pour la livraison.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
     <section class="py-5 bg-light">
         <div class="container">
-            <h2 class="text-center mb-5">Comment ça marche ?</h2>
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Ce qu'en disent nos clients</h2>
+                <p class="lead text-muted">Découvrez les témoignages de nos utilisateurs satisfaits</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="card testimonial-card h-100">
+                        <img src="{{ asset('images/testimonial-1.jpg') }}" class="testimonial-image" alt="Client 1">
+                        <div class="card-body">
+                            <p class="card-text">"Grâce à AgriCarte, je peux facilement trouver des produits frais et locaux. Une vraie révolution dans ma façon de consommer !"</p>
+                            <h5 class="card-title mb-0">Marie D.</h5>
+                            <small class="text-muted">Client depuis 2022</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="card testimonial-card h-100">
+                        <img src="{{ asset('images/testimonial-2.jpg') }}" class="testimonial-image" alt="Client 2">
+                        <div class="card-body">
+                            <p class="card-text">"En tant que producteur, AgriCarte m'a permis de développer ma clientèle locale. Une plateforme simple et efficace !"</p>
+                            <h5 class="card-title mb-0">Jean P.</h5>
+                            <small class="text-muted">Producteur depuis 2021</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="card testimonial-card h-100">
+                        <img src="{{ asset('images/testimonial-3.jpg') }}" class="testimonial-image" alt="Client 3">
+                        <div class="card-body">
+                            <p class="card-text">"La qualité des produits est exceptionnelle. Je recommande vivement AgriCarte à tous les amateurs de produits frais !"</p>
+                            <h5 class="card-title mb-0">Sophie L.</h5>
+                            <small class="text-muted">Client depuis 2023</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <div class="mb-4">
-                        <i class="fas fa-map-marker-alt fa-3x text-success"></i>
-                    </div>
-                    <h4>Trouvez des agriculteurs</h4>
-                    <p>Découvrez les agriculteurs près de chez vous grâce à notre carte interactive.</p>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-4">
-                        <i class="fas fa-shopping-basket fa-3x text-success"></i>
-                    </div>
-                    <h4>Choisissez vos produits</h4>
-                    <p>Parcourez les produits frais et de saison proposés par les agriculteurs locaux.</p>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-4">
-                        <i class="fas fa-handshake fa-3x text-success"></i>
-                    </div>
-                    <h4>Achetez en direct</h4>
-                    <p>Contactez l'agriculteur et achetez directement à la ferme ou sur les marchés.</p>
+    <!-- Newsletter Section -->
+    <section class="py-5 newsletter-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="display-5 fw-bold mb-4">Restez informés</h2>
+                    <p class="lead mb-5">Inscrivez-vous à notre newsletter pour recevoir les dernières actualités et offres spéciales.</p>
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST" class="newsletter-form" data-ajax="true">
+                        @csrf
+                        <div class="input-group mb-3">
+                            <input type="email" name="email" class="form-control" placeholder="Votre adresse email" required>
+                            <button class="btn btn-light" type="submit">S'inscrire</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
-    <section class="bg-white py-5">
-        <!-- Testimonials Section -->
-        <div class="container mb-5">
-            <h2 class="text-center mb-4">Témoignages</h2>
-            <div class="text-center my-4">
-                Découvrez ce que nos clients pensent de nos services
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card border-0 h-100 shadow">
-                        <div class="card-body text-center">
-                            <img src="{{ asset('images/testimonials/testimonial1.jpg') }}" alt="Témoignage"
-                                class="img-fluid rounded mb-4" style="max-height: 230px; object-fit: cover;">
-                            <div class="mb-4">
-                                <i class="fas fa-quote-left text-success fa-2x me-2 opacity-50"></i>
-                                <span class="text-muted fst-italic">Ce service est excellent! Grâce à leur
-                                    professionnalisme, j'ai pu
-                                    faire évoluer mon entreprise rapidement.</span>
-                                <i class="fas fa-quote-right text-success fa-2x ms-2 opacity-50"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Saul Goodman</h5>
-                                <p class="text-muted">PDG & Fondateur</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 h-100  shadow">
-                        <div class="card-body text-center">
-                            <img src="{{ asset('images/testimonials/testimonial2.jpg') }}" alt="Témoignage"
-                                class="img-fluid rounded mb-4" style="max-height: 230px; object-fit: cover;">
-                            <div class="mb-4">
-                                <i class="fas fa-quote-left text-success fa-2x me-2 opacity-50"></i>
-                                <span class="text-muted fst-italic">Un accompagnement de qualité! Une équipe à l'écoute et
-                                    des
-                                    résultats à la hauteur de mes attentes.</span>
-                                <i class="fas fa-quote-right text-success fa-2x ms-2 opacity-50"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Sara Wilson</h5>
-                                <p class="text-muted">Designer</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 h-100  shadow">
-                        <div class="card-body text-center">
-                            <img src="{{ asset('images/testimonials/testimonial3.jpg') }}" alt="Témoignage"
-                                class="img-fluid rounded mb-4" style="max-height: 230px; object-fit: cover;">
-                            <div class="mb-4">
-                                <i class="fas fa-quote-left text-success fa-2x me-2 opacity-50"></i>
-                                <span class="text-muted fst-italic">Une expérience incroyable! J'ai pu améliorer mes ventes
-                                    et
-                                    fidéliser mes clients grâce à leur aide.</span>
-                                <i class="fas fa-quote-right text-success fa-2x ms-2 opacity-50"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Jena Karlis</h5>
-                                <p class="text-muted">Propriétaire de boutique</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="bg-success h-25">
     </section>
 @endsection
 
-@section('scripts')
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" defer></script>
-    <script>
-        function initMap() {
-            // Coordonnées centrales de la France
-            const center = {
-                lat: 46.603354,
-                lng: 1.888334
-            };
+@push('scripts')
+<script>
+    // Animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const elements = document.querySelectorAll('.feature-card, .product-card, .testimonial-card');
 
-            // Créer la carte
-            const map = new google.maps.Map(document.getElementById("map-home"), {
-                zoom: 6,
-                center: center,
-            });
-
-            // Exemple de marqueurs pour les producteurs
-            const producers = [{
-                    position: {
-                        lat: 47.218371,
-                        lng: -1.553621
-                    },
-                    title: "Producteur à Nantes"
-                },
-                {
-                    position: {
-                        lat: 44.837789,
-                        lng: -0.579180
-                    },
-                    title: "Producteur à Bordeaux"
-                },
-                {
-                    position: {
-                        lat: 45.764043,
-                        lng: 4.835659
-                    },
-                    title: "Producteur à Lyon"
-                },
-                {
-                    position: {
-                        lat: 43.604652,
-                        lng: 1.444209
-                    },
-                    title: "Producteur à Toulouse"
-                }
-            ];
-
-            // Ajouter les marqueurs
-            producers.forEach(({
-                position,
-                title
-            }) => {
-                const marker = new google.maps.Marker({
-                    position,
-                    map,
-                    title,
-                });
-            });
-        }
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const productsContainer = document.getElementById('productsContainer');
-            const prevButton = document.getElementById('prevProduct');
-            const nextButton = document.getElementById('nextProduct');
-            const paginationDots = document.querySelectorAll('.pagination-dot');
-            let currentPage = 0;
-            const productsPerPage = 4;
-
-            function showProducts(page) {
-                const products = productsContainer.querySelectorAll('.col-md-3');
-                products.forEach((product, index) => {
-                    if (index >= page * productsPerPage && index < (page + 1) * productsPerPage) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-
-                // Update pagination dots
-                paginationDots.forEach((dot, index) => {
-                    if (index === page) {
-                        dot.classList.remove('btn-outline-secondary');
-                        dot.classList.add('btn-primary');
-                    } else {
-                        dot.classList.remove('btn-primary');
-                        dot.classList.add('btn-outline-secondary');
-                    }
-                });
-
-                // Update button states
-                prevButton.disabled = page === 0;
-                nextButton.disabled = page >= Math.ceil(products.length / productsPerPage) - 1;
-            }
-
-            prevButton.addEventListener('click', () => {
-                if (currentPage > 0) {
-                    currentPage--;
-                    showProducts(currentPage);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__animated', 'animate__fadeInUp');
                 }
             });
-
-            nextButton.addEventListener('click', () => {
-                if (currentPage < Math.ceil(productsContainer.querySelectorAll('.col-md-3').length /
-                        productsPerPage) - 1) {
-                    currentPage++;
-                    showProducts(currentPage);
-                }
-            });
-
-            paginationDots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    currentPage = index;
-                    showProducts(currentPage);
-                });
-            });
-
-            // Initialize
-            showProducts(0);
+        }, {
+            threshold: 0.1
         });
-    </script>
-@endsection
+
+        elements.forEach(element => {
+            observer.observe(element);
+        });
+    });
+</script>
+@endpush

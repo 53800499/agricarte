@@ -14,7 +14,7 @@ class ProductControllers extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with('farmer');
+        $query = Product::with('user', 'category');
 
         // Filtre par recherche
         if ($request->has('search')) {
@@ -55,6 +55,13 @@ class ProductControllers extends Controller
         $categories = Category::all();
         $farmers = User::where('role', 'farmer')->get();
         return view('admin.products.index', compact('products', 'farmers', 'categories'));
+    }
+
+    public function create()
+    {
+        $categories = Category::all();
+        $farmers = User::where('role', 'farmer')->get();
+        return view('admin.products.create', compact('categories', 'farmers'));
     }
 
     public function store(Request $request)
@@ -245,6 +252,13 @@ class ProductControllers extends Controller
         }
 
         return view('admin.products.show', compact('product'));
+    }
+
+    public function edit(Product $product)
+    {
+        $categories = Category::all();
+        $farmers = User::where('role', 'farmer')->get();
+        return view('admin.products.edit', compact('product', 'categories', 'farmers'));
     }
 
     public function update(Request $request, Product $product)

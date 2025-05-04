@@ -29,4 +29,10 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'farmer_id');
     }
+    // App\Models\Product.php
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
 }

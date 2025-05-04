@@ -9,11 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    /**
+     * Display the home page.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $heroSlides = [
             ['image' => 'images/slide1.jpg', 'title' => 'Produits frais', 'description' => 'Directement du champ à votre assiette.'],
-            ['image' => 'images/slide2.jpg', 'title' => 'Agriculteurs locaux', 'description' => 'Soutenez l’agriculture de proximité.'],
+            ['image' => 'images/slide2.jpg', 'title' => 'Agriculteurs locaux', 'description' => 'Soutenez l'agriculture de proximité.'],
             ['image' => 'images/slide3.jpg', 'title' => 'Qualité et saveur', 'description' => 'Des produits naturels et savoureux.'],
         ];
 
@@ -34,8 +39,8 @@ class HomeController extends Controller
             $user = Auth::user();
             $query->whereHas('user', function ($q) use ($user, $request) {
                 $q->whereRaw("
-                    (6371 * acos(cos(radians(?)) * cos(radians(latitude)) * 
-                    cos(radians(longitude) - radians(?)) + 
+                    (6371 * acos(cos(radians(?)) * cos(radians(latitude)) *
+                    cos(radians(longitude) - radians(?)) +
                     sin(radians(?)) * sin(radians(latitude)))) <= ?
                 ", [$user->latitude, $user->longitude, $user->latitude, $request->distance]);
             });
@@ -55,6 +60,6 @@ class HomeController extends Controller
         $featuredProducts = $query->paginate(12);
         $categories = Category::where('is_active', true)->get();
 
-        return view('home', compact('featuredProducts', 'categories','heroSlides'));
+        return view('home', compact('featuredProducts', 'categories', 'heroSlides'));
     }
 }

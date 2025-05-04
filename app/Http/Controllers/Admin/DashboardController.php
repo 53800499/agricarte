@@ -3,30 +3,64 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Support\Facades\Storage;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $stats = [
-            'farmers_count' => User::where('role', 'farmer')->count(),
-            'products_count' => Product::count(),
-            'recent_farmers' => User::where('role', 'farmer')
-                ->latest()
-                ->take(5)
-                ->get(),
-            'recent_products' => Product::with('user')
-                ->latest()
-                ->take(5)
-                ->get(),
+        // Statistiques de base
+        $todayOrders = Order::whereDate('created_at', today())->count();
+        $totalProducts = Product::count();
+        $totalCustomers = User::where('role', 'customer')->count();
+        $monthlyRevenue = Order::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->where('status', 'completed')
+            ->sum('total');
+
+        // Données pour le graphique des ventes (30 derniers jours)
+        $salesData = [
+            'labels' => [],
+            'values' => []
         ];
 
-        return view('admin.dashboard', compact('stats'));
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $salesData['labels'][] = $date->format('d/m');
+            $salesData['values'][] = Order::whereDate('created_at', $date)
+                ->where('status', 'completed')
+                ->sum('total');
+        }
+
+        // Produits les plus vendus
+        $topProducts = Product::withCount(['orders as total_sales' => function($query) {
+            $query->where('status', 'completed');
+        }])
+        ->orderByDesc('total_sales')
+        ->take(5)
+        ->get();
+
+        // Dernières commandes
+        $recentOrders = Order::with('user')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'todayOrders',
+            'totalProducts',
+            'totalCustomers',
+            'monthlyRevenue',
+            'salesData',
+            'topProducts',
+            'recentOrders'
+        ));
     }
     public function showProfil(Request $request, $user)
     {
