@@ -16,6 +16,10 @@ class ProductControllers extends Controller
     {
         $query = Product::with('user', 'category');
 
+        // Si l'utilisateur est un agriculteur, ne montrer que ses produits
+        if (auth()->user()->role === 'farmer') {
+            $query->where('farmer_id', auth()->id());
+        }
         // Filtre par recherche
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -263,32 +267,142 @@ class ProductControllers extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'farmer_id' => 'required|exists:users,id',
-            'image' => 'nullable|image|max:2048',
-            'is_available' => 'nullable|boolean',
-            'is_organic' => 'nullable|boolean',
-            'is_featured' => 'nullable|boolean',
-        ]);
+        try {
+            // Log des données reçues
+            Log::info('Updating product', ['product_id' => $product->id, 'request' => $request->except('image', 'additional_images')]);
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            // Vérification de la taille des images
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                if ($image->getSize() > 10 * 1024 * 1024) { // 10MB
+                    throw new \Exception('L\'image principale ne doit pas dépasser 10MB');
+                }
             }
-            $validated['image'] = $request->file('image')->store('products', 'public');
-        } elseif ($request->remove_image) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+
+            if ($request->hasFile('additional_images')) {
+                foreach ($request->file('additional_images') as $image) {
+                    if ($image->getSize() > 10 * 1024 * 1024) { // 10MB
+                        throw new \Exception('Les images supplémentaires ne doivent pas dépasser 10MB chacune');
+                    }
+                }
             }
-            $validated['image'] = null;
+
+            // Préparation des données booléennes
+            $request->merge([
+                'is_available' => $request->has('is_available'),
+                'is_organic' => $request->has('is_organic'),
+                'is_featured' => $request->has('is_featured'),
+            ]);
+
+            // Validation des données
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'stock_quantity' => 'required|numeric|min:0',
+                'unit' => 'required|string|max:20',
+                'category_id' => 'required|exists:categories,id',
+                'user_id' => 'required|exists:users,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB
+                'additional_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB
+                'is_available' => 'boolean',
+                'is_organic' => 'boolean',
+                'is_featured' => 'boolean',
+            ]);
+
+            // Traitement de l'image principale
+            if ($request->hasFile('image')) {
+                try {
+                    // Supprimer l'ancienne image si elle existe
+                    if ($product->image && Storage::exists('public/' . $product->image)) {
+                        Storage::delete('public/' . $product->image);
+                    }
+
+                    $image = $request->file('image');
+                    $fileNameWithExt = $image->getClientOriginalName();
+                    $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+                    $extension = $image->getClientOriginalExtension();
+                    $fileNameToStore = $fileName.'_'.time().'.'.$extension;
+                    $path = $image->storeAs('public/products', $fileNameToStore);
+                    $validated['image'] = 'products/' . $fileNameToStore;
+
+                    Log::info('Main image updated successfully', [
+                        'product_id' => $product->id,
+                        'original_name' => $fileNameWithExt,
+                        'stored_name' => $fileNameToStore
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Error updating main image', [
+                        'product_id' => $product->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    throw $e;
+                }
+            }
+
+            // Traitement des images supplémentaires
+            if ($request->hasFile('additional_images')) {
+                $additionalImages = [];
+                foreach ($request->file('additional_images') as $image) {
+                    try {
+                        $fileNameWithExt = $image->getClientOriginalName();
+                        $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+                        $extension = $image->getClientOriginalExtension();
+                        $fileNameToStore = $fileName.'_'.time().'.'.$extension;
+                        $path = $image->storeAs('public/products/additional', $fileNameToStore);
+                        $additionalImages[] = 'products/additional/' . $fileNameToStore;
+
+                        Log::info('Additional image uploaded successfully', [
+                            'product_id' => $product->id,
+                            'original_name' => $fileNameWithExt,
+                            'stored_name' => $fileNameToStore
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::error('Error storing additional image', [
+                            'product_id' => $product->id,
+                            'error' => $e->getMessage()
+                        ]);
+                        continue;
+                    }
+                }
+                $validated['additional_images'] = json_encode($additionalImages);
+            }
+
+            // Mise à jour du produit
+            $product->update($validated);
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Produit mis à jour avec succès.',
+                    'product' => $product
+                ]);
+            }
+
+            return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour avec succès.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', ['errors' => $e->errors()]);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            Log::error('Error updating product', [
+                'product_id' => $product->id,
+                'error' => $e->getMessage()
+            ]);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
-
-        $product->update($validated);
-
-        return redirect()->route('products.index')->with('success', 'Produit mis à jour avec succès.');
     }
 
     public function destroy(Product $product)

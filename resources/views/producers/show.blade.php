@@ -126,8 +126,10 @@
             @forelse($producer->products as $product)
                 <div class="col-md-4 mb-4 animate__animated animate__fadeInUp">
                     <div class="product-card">
-                        <img src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->path) : asset('images/default-product.jpg') }}"
-                            class="product-image w-100" alt="{{ $product->name }}">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/logo.jpg') }}"
+                            class="product-image w-100"
+                            alt="{{ $product->name }}">
+
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text text-muted">{{ $product->category->name }}</p>

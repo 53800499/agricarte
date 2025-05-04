@@ -94,7 +94,7 @@
                                 @endif
                                 <th>Prix</th>
                                 <th>Stock</th>
-                                <th>Statut</th>
+                                <th>Vente</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -103,7 +103,7 @@
                                 <tr>
                                     <td>
                                         @if($product->image)
-                                            <img src="{{ asset('storage/' . $product->image) }}"
+                                            <img src="{{ asset('storage/products/' . $product->image) }}"
                                                  alt="{{ $product->name }}"
                                                  class="img-thumbnail"
                                                  style="width: 50px; height: 50px; object-fit: cover;">
@@ -117,23 +117,23 @@
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->category->name }}</td>
                                     @if(auth()->user()->role === 'admin')
-                                        <td>{{ $product->farmer->name }}</td>
+                                        <td>{{ $product->user->name }}</td>
                                     @endif
                                     <td>{{ number_format($product->price, 2, ',', ' ') }} €</td>
-                                    <td>{{ $product->stock }}</td>
+                                    <td>{{ $product->stock_quantity }} {{ $product->unit }}</td>
                                     <td>
-                                        <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-danger' }}">
-                                            {{ $product->is_active ? 'Actif' : 'Inactif' }}
+                                        <span class="badge {{ $product->is_featured ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $product->is_featured ? 'Actif' : 'Inactif' }}
                                         </span>
                                     </td>
                                     <td>
                                         <div class="btn-group">
                                             <a href="{{ route('admin.products.show', $product) }}"
-                                               class="btn btn-sm btn-info">
+                                               class="btn btn-sm btn-outline-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             <a href="{{ route('admin.products.edit', $product) }}"
-                                               class="btn btn-sm btn-primary">
+                                               class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.products.destroy', $product) }}"
@@ -142,7 +142,7 @@
                                                   onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

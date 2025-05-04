@@ -5,192 +5,202 @@
 @section('content')
     <div class="container-fluid px-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Détails de l'utilisateur</h1>
-            <div class="d-flex gap-2">
-                <a href="{{ route('users.edit', $user) }}" class="btn btn-primary">
-                    <i class="fas fa-edit"></i> Modifier
+            <div>
+                <h1 class="h3 mb-0 text-gray-800">Détails de l'utilisateur</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Tableau de bord</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Détails</li>
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary me-2">
+                    <i class="fas fa-arrow-left me-2"></i>Retour
                 </a>
-                <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Retour
+                <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>Modifier
                 </a>
             </div>
         </div>
 
         <div class="row">
-            <!-- Informations de base -->
-            <div class="col-xl-4">
+            <div class="col-lg-4">
+                <!-- Carte de profil -->
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Informations personnelles</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center mb-4">
+                    <div class="card-body text-center">
+                        <div class="position-relative d-inline-block mb-3">
                             @if($user->profile_image)
                                 <img src="{{ asset('storage/' . $user->profile_image) }}"
-                                     alt="{{ $user->name }}"
-                                     class="img-profile rounded-circle"
+                                     alt="Photo de profil"
+                                     class="rounded-circle"
                                      style="width: 150px; height: 150px; object-fit: cover;">
                             @else
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto"
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto"
                                      style="width: 150px; height: 150px;">
-                                    <i class="fas fa-user fa-3x text-white"></i>
+                                    <i class="fas fa-user fa-3x text-gray-400"></i>
                                 </div>
                             @endif
-                        </div>
-                        <div class="mb-3">
-                            <label class="fw-bold">Nom complet</label>
-                            <p>{{ $user->name }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="fw-bold">Email</label>
-                            <p>{{ $user->email }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="fw-bold">Téléphone</label>
-                            <p>{{ $user->phone ?? 'Non renseigné' }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="fw-bold">Rôle</label>
-                            <p>
-                                <span class="badge
-                                    @switch($user->role)
-                                        @case('admin')
-                                            bg-danger
-                                            @break
-                                        @case('farmer')
-                                            bg-success
-                                            @break
-                                        @default
-                                            bg-primary
-                                    @endswitch
-                                ">
+                            <div class="position-absolute bottom-0 end-0">
+                                <span class="badge bg-{{ $user->role === 'admin' ? 'danger' : ($user->role === 'farmer' ? 'success' : 'primary') }}">
                                     {{ ucfirst($user->role) }}
                                 </span>
-                            </p>
+                            </div>
+                        </div>
+                        <h5 class="mb-1">{{ $user->name }}</h5>
+                        <p class="text-muted mb-3">{{ $user->email }}</p>
+                        <p class="small text-muted mb-0">
+                            <i class="fas fa-calendar-alt me-1"></i>
+                            Membre depuis {{ $user->created_at->format('d/m/Y') }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Statut du compte -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-user-shield me-2"></i>Statut du compte
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Statut</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="is_active" disabled
+                                       {{ $user->is_active ? 'checked' : '' }}>
+                                <label class="form-check-label" for="is_active">
+                                    {{ $user->is_active ? 'Compte actif' : 'Compte inactif' }}
+                                </label>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label class="fw-bold">Statut</label>
-                            <p>
-                                <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $user->is_active ? 'Actif' : 'Inactif' }}
-                                </span>
-                            </p>
+                            <label class="form-label">Rôle</label>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-{{ $user->role === 'admin' ? 'user-shield' : ($user->role === 'farmer' ? 'tractor' : 'user') }} me-2"></i>
+                                <span>{{ ucfirst($user->role) }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Informations supplémentaires -->
-            <div class="col-xl-8">
-                <!-- Adresse -->
+            <div class="col-lg-8">
+                <!-- Informations personnelles -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Adresse</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-user me-2"></i>Informations personnelles
+                        </h6>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label class="fw-bold">Adresse</label>
-                            <p>{{ $user->address ?? 'Non renseignée' }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="fw-bold">Ville</label>
-                            <p>{{ $user->city ?? 'Non renseignée' }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="fw-bold">Code postal</label>
-                            <p>{{ $user->postal_code ?? 'Non renseigné' }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <label class="fw-bold">Pays</label>
-                            <p>{{ $user->country ?? 'Non renseigné' }}</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nom complet</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user me-2"></i>
+                                    <span>{{ $user->name }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    <span>{{ $user->email }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Téléphone</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-phone me-2"></i>
+                                    <span>{{ $user->phone ?? 'Non renseigné' }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Informations du producteur -->
-                @if($user->role === 'farmer')
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Informations du producteur</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="fw-bold">Description</label>
-                                <p>{{ $user->description ?? 'Non renseignée' }}</p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="fw-bold">Coordonnées GPS</label>
-                                <p>
-                                    @if($user->latitude && $user->longitude)
-                                        <a href="https://www.google.com/maps?q={{ $user->latitude }},{{ $user->longitude }}"
-                                           target="_blank" class="btn btn-sm btn-info">
-                                            <i class="fas fa-map-marker-alt"></i> Voir sur la carte
-                                        </a>
-                                    @else
-                                        Non renseignées
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
+                <!-- Adresse -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-map-marker-alt me-2"></i>Adresse
+                        </h6>
                     </div>
-                @endif
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Adresse</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-home me-2"></i>
+                                    <span>{{ $user->address ?? 'Non renseignée' }}</span>
+                                </div>
+                            </div>
 
-                <!-- Dernières commandes -->
-                @if($user->orders->count() > 0)
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Dernières commandes</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>N° Commande</th>
-                                            <th>Date</th>
-                                            <th>Total</th>
-                                            <th>Statut</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($user->orders->take(5) as $order)
-                                            <tr>
-                                                <td>#{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</td>
-                                                <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                                                <td>{{ number_format($order->total, 2, ',', ' ') }} €</td>
-                                                <td>
-                                                    <span class="badge
-                                                        @switch($order->status)
-                                                            @case('completed')
-                                                                bg-success
-                                                                @break
-                                                            @case('processing')
-                                                                bg-info
-                                                                @break
-                                                            @case('pending')
-                                                                bg-warning
-                                                                @break
-                                                            @case('cancelled')
-                                                                bg-danger
-                                                                @break
-                                                        @endswitch
-                                                    ">
-                                                        {{ ucfirst($order->status) }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-info">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ville</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-city me-2"></i>
+                                    <span>{{ $user->city ?? 'Non renseignée' }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Code postal</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-mail-bulk me-2"></i>
+                                    <span>{{ $user->postal_code ?? 'Non renseigné' }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Pays</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-globe me-2"></i>
+                                    <span>{{ $user->country ?? 'Non renseigné' }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                @if($user->role === 'farmer')
+                <!-- Informations du producteur -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-tractor me-2"></i>Informations du producteur
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Description</label>
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-align-left me-2 mt-1"></i>
+                                    <span>{{ $user->description ?? 'Non renseignée' }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Latitude</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-map-marked-alt me-2"></i>
+                                    <span>{{ $user->latitude ?? 'Non renseignée' }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Longitude</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-map-marked-alt me-2"></i>
+                                    <span>{{ $user->longitude ?? 'Non renseignée' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @endif
             </div>
         </div>

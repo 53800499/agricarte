@@ -159,16 +159,16 @@
                                 <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-info" title="Voir">
+                                        <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-info" title="Voir">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('orders.edit', $order) }}" class="btn btn-sm btn-primary" title="Modifier">
+                                        <a href="{{ route('orders.edit', $order) }}" class="btn btn-sm btn-outline-primary" title="Modifier">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="{{ route('orders.destroy', $order) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Supprimer"
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer"
                                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -193,7 +193,7 @@
             <!-- Pagination -->
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div class="text-muted">
-                    Affichage de {{ $orders->firstItem() ?? 0 }} à {{ $orders->lastItem() ?? 0 }} sur {{ $orders->total() }} commandes
+                    Affichage de {{ ($orders->currentPage() - 1) * $orders->perPage() + 1 }} à {{ min($orders->currentPage() * $orders->perPage(), $orders->total()) }} sur {{ $orders->total() }} commandes
                 </div>
                 <div>
                     {{ $orders->links() }}

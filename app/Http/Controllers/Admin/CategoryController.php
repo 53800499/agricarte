@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -27,19 +28,20 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
-            'parent_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            /*'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', */
             'is_active' => 'boolean'
         ]);
+        Log::info($validated);
 
-        if ($request->hasFile('image')) {
+        /* if ($request->hasFile('image')) {
             $path = $request->file('image')->store('categories', 'public');
             $validated['image'] = $path;
-        }
+        } */
 
         Category::create($validated);
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Catégorie créée avec succès');
     }
 
@@ -60,36 +62,36 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug,' . $category->id,
             'description' => 'nullable|string',
-            'parent_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            /* 'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', */
             'is_active' => 'boolean'
         ]);
 
-        if ($request->hasFile('image')) {
+        /* if ($request->hasFile('image')) {
             // Supprimer l'ancienne image si elle existe
             if ($category->image) {
                 Storage::disk('public')->delete($category->image);
             }
             $path = $request->file('image')->store('categories', 'public');
             $validated['image'] = $path;
-        }
+        } */
 
         $category->update($validated);
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Catégorie mise à jour avec succès');
     }
 
     public function destroy(Category $category)
     {
         // Supprimer l'image si elle existe
-        if ($category->image) {
+        /* if ($category->image) {
             Storage::disk('public')->delete($category->image);
-        }
+        } */
 
         $category->delete();
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Catégorie supprimée avec succès');
     }
 }

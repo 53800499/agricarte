@@ -5,7 +5,7 @@
 @push('styles')
 <style>
     .product-hero {
-        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/products-hero.jpg') }}');
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/slide1.jpg') }}');
         background-size: cover;
         background-position: center;
         min-height: 300px;
@@ -26,30 +26,38 @@
     .product-card {
         border: none;
         border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        height: 100%;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
     }
 
     .product-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
 
     .product-image {
         height: 200px;
         object-fit: cover;
-        border-radius: 10px 10px 0 0;
     }
 
     .category-badge {
         position: absolute;
         top: 10px;
         right: 10px;
-        background: rgba(255, 255, 255, 0.9);
+        background-color: var(--primary-color);
+        color: white;
         padding: 5px 10px;
-        border-radius: 20px;
+        border-radius: 5px;
         font-size: 0.8rem;
+    }
+
+    .producer-link {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    .producer-link:hover {
+        text-decoration: underline;
     }
 
     .price-tag {
@@ -59,20 +67,11 @@
     }
 
     .unit-badge {
-        background: var(--primary-color);
-        color: white;
-        padding: 3px 8px;
-        border-radius: 10px;
+        background-color: #f8f9fa;
+        color: #6c757d;
+        padding: 5px 10px;
+        border-radius: 5px;
         font-size: 0.8rem;
-    }
-
-    .producer-link {
-        color: var(--secondary-color);
-        text-decoration: none;
-    }
-
-    .producer-link:hover {
-        color: var(--primary-color);
     }
 
     @media (max-width: 768px) {
@@ -137,7 +136,7 @@
                     </select>
                 </div>
                 <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-success">
                         <i class="fas fa-filter me-2"></i>Filtrer
                     </button>
                     <a href="{{ route('products.index') }}" class="btn btn-outline-secondary ms-2">
@@ -150,35 +149,62 @@
         <!-- Products Grid -->
         <div class="row">
             @forelse($products as $product)
-                <div class="col-md-4 mb-4 animate__animated animate__fadeInUp">
-                    <div class="product-card">
-                        <div class="position-relative">
-                            <img src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->path) : asset('images/default-product.jpg') }}"
-                                class="product-image w-100" alt="{{ $product->name }}">
-                            <span class="category-badge">{{ $product->category->name }}</span>
+            <div class="col-md-4 col-lg-3 mb-4 product-card" 
+                 data-category="{{ $product->category_id ?? '' }}"
+                 data-price="{{ $product->price ?? 0 }}"
+                 data-organic="{{ $product->is_organic ? '1' : '0' }}"
+                 data-featured="{{ $product->is_featured ? '1' : '0' }}">
+                <div class="p-2 h-100 border-0 ">
+                    <div class="position-relative">
+                        <img src="{{ $product->image ? asset('storage/products/' . $product->image) : asset('images/products/logo.jpg') }}" 
+                             class="card-img-top" 
+                             alt="{{ $product->name }}"
+                             style="height: 200px; object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 p-2">
+                            @if($product->is_organic)
+                                <span class="badge bg-success">Bio</span>
+                            @endif
+                            @if($product->is_featured)
+                                <span class="badge bg-warning">En vedette</span>
+                            @endif
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="card-text text-muted">
-                                <a href="{{ route('producers.show', $product->farmer) }}" class="producer-link">
-                                    <i class="fas fa-user me-1"></i>{{ $product->farmer->name }}
-                                </a>
-                            </p>
-                            <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price-tag">{{ number_format($product->price, 2) }} €</span>
-                                <span class="unit-badge">{{ $product->unit }}</span>
-                            </div>
+                    </div>
+                    <div class="card-body pt-2">
+                        <h5 class="card-title">{{ $product->name }}</h5>
+                        <p class="text-muted small">{{ $product->category->name ?? 'Non catégorisé' }}</p>
+                        <div class="d-flex justify-content-between align-items-cente mt-0r">
+                            <span class="h5 text-primary mb-0">{{ number_format($product->price ?? 0, 2) }}€</span>
+                            <span class="badge bg-{{ ($product->stock_quantity ?? 0) > 0 ? 'success' : 'danger' }}">
+                                {{ ($product->stock_quantity ?? 0) > 0 ? 'En stock' : 'Rupture' }}
+                            </span>
+                        </div>
+                        <p class="card-text small text-muted">
+                            {{ Str::limit($product->description ?? '', 100) }}
+                        </p>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ isset($product->user->profile_photo) ? asset('storage/profile_images/' . $product->user->profile_photo) : asset('images/logo.jpg') }}" 
+                                 class="rounded-circle me-2" 
+                                 style="width: 30px; height: 30px; object-fit: cover;"
+                                 alt="{{ $product->user->name ?? 'Agriculteur' }}">
+                            <small class="text-muted">{{ $product->user->name ?? 'Agriculteur' }}</small>
+                        </div>
+                        <div class="d-grid">
+                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-outline-success">
+                                Voir le produit
+                            </a>
                         </div>
                     </div>
                 </div>
-            @empty
-                <div class="col-12 text-center py-5">
-                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                    <h4>Aucun produit trouvé</h4>
+            </div>
+        @empty
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <img src="{{ asset('images/empty-products.svg') }}" alt="Aucun produit" class="mb-4" style="max-width: 200px;">
+                    <h4 class="text-muted">Aucun produit trouvé</h4>
                     <p class="text-muted">Essayez de modifier vos critères de recherche</p>
                 </div>
-            @endforelse
+            </div>
+        @endforelse
         </div>
 
         <!-- Pagination -->

@@ -10,7 +10,12 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['user', 'products'])->latest()->paginate(10);
+        $orders = Order::with(['user', 'products']);
+        // Si l'utilisateur est un agriculteur, ne montrer que ses produits
+        if (auth()->user()->role === 'farmer') {
+            $orders->where('farmer_id', auth()->id());
+        }
+        $orders = $orders->latest()->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
 

@@ -110,11 +110,11 @@
                                     <td>
                                         <div class="btn-group">
                                             <a href="{{ route('admin.farmers.show', $farmer) }}"
-                                               class="btn btn-sm btn-info">
+                                               class="btn btn-sm btn-outline-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             <a href="{{ route('admin.farmers.edit', $farmer) }}"
-                                               class="btn btn-sm btn-primary">
+                                               class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.farmers.destroy', $farmer) }}"
@@ -123,7 +123,7 @@
                                                   onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet agriculteur ?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

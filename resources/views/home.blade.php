@@ -327,7 +327,7 @@
                     <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown">Bienvenue sur AgriCarte</h1>
                     <p class="lead animate__animated animate__fadeInUp">Découvrez les producteurs locaux et leurs produits frais</p>
                     <div class="mt-4 animate__animated animate__fadeInUp">
-                        <a href="{{ route('products') }}" class="btn btn-primary btn-lg me-3">Voir les produits</a>
+                        <a href="{{ route('products') }}" class="btn btn-success btn-lg me-3">Voir les produits</a>
                         <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg">Devenir producteur</a>
                     </div>
                 </div>
@@ -390,7 +390,7 @@
                 @foreach($featuredProducts as $product)
                 <div class="col-md-4 animate-on-scroll">
                     <div class="card product-card h-100">
-                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
+                        <img src="{{ asset('storage/products/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
                         <div class="category-badge">{{ $product->category->name }}</div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>

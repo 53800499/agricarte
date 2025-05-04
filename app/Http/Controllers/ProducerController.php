@@ -15,7 +15,7 @@ class ProducerController extends Controller
         }
 
         // Charger les relations nécessaires
-        $producer->load(['products.category', 'products.images']);
+        $producer->load(['products.category']);
 
         return view('producers.show', compact('producer'));
     }

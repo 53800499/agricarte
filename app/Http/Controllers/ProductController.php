@@ -12,12 +12,12 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'images', 'farmer']);
+        $query = Product::with(['category', 'user']);
 
         // Si l'utilisateur est un agriculteur, ne montrer que ses produits
-        if (auth()->user()->role === 'farmer') {
+        /* if (auth()->user()->role === 'farmer') {
             $query->where('farmer_id', auth()->id());
-        }
+        } */
 
         // Filtre par catégorie
         if ($request->has('category')) {
@@ -130,7 +130,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        $product->load(['category', 'images', 'farmer']);
+        $product->load(['category', 'user']);
         return view('products.show', compact('product'));
     }
 

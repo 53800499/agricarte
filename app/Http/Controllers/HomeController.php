@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,8 @@ class HomeController extends Controller
             ->latest()
             ->take(6)
             ->get();
+
+        Log::info($featuredProducts);
 
         return view('home', compact('featuredProducts', 'categories'));
     }

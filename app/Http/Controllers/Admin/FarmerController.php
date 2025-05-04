@@ -54,6 +54,7 @@ class FarmerController extends Controller
     public function store(Request $request)
     {
         try {
+            Log::info('Donnée: ', $request->all());
             // Validation des données
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -173,7 +174,7 @@ class FarmerController extends Controller
 
         $farmer->update($validated);
 
-        return redirect()->route('farmers.index')->with('success', 'Agriculteur mis à jour avec succès.');
+        return redirect()->route('admin.farmers.index')->with('success', 'Agriculteur mis à jour avec succès.');
     }
 
     public function destroy(User $farmer)
@@ -184,11 +185,16 @@ class FarmerController extends Controller
 
         $farmer->delete();
 
-        return redirect()->route('farmers.index')->with('success', 'Agriculteur supprimé avec succès.');
+        return redirect()->route('admin.farmers.index')->with('success', 'Agriculteur supprimé avec succès.');
     }
 
     public function create()
     {
         return view('admin.farmers.create');
+    }
+    public function edit(Request $request, $farmer)
+    {
+        $farmer = User::find($farmer);
+        return view('admin.farmers.edit', compact('farmer'));
     }
 }

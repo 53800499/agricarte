@@ -57,9 +57,9 @@
                                 <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Livrée</option>
                                 <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Annulée</option>
                             </select>
-                            @error('status')
+                            {{-- @error('status')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                            @enderror --}}
                         </div>
                     @endif
 

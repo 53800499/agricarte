@@ -101,7 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Produits
         Route::get('/products', [ProductControllers::class, 'index'])->name('admin.products.index');
         Route::get('/products/create', [ProductControllers::class, 'create'])->name('admin.products.create');
-        Route::post('/products', [ProductControllers::class, 'store'])->name('admin.products.store');
+        Route::post('/product', [ProductControllers::class, 'store'])->name('admin.products.store');
         Route::get('/products/{product}', [ProductControllers::class, 'show'])->name('admin.products.show');
         Route::get('/products/{product}/edit', [ProductControllers::class, 'edit'])->name('admin.products.edit');
         Route::put('/products/{product}', [ProductControllers::class, 'update'])->name('admin.products.update');
@@ -122,7 +122,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
         Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-        Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::post('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
         // Commandes
@@ -144,9 +144,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
         // Paramètres admin
-        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-        Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+        Route::put('/admin/settings', [SettingController::class, 'update'])->name('settings.update');
     });
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings');
 
     /*
     |--------------------------------------------------------------------------

@@ -60,16 +60,16 @@
                                     <td>{{ $user->city ?? '-' }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.users.show', $user) }}" class="btn btn-info btn-sm">
+                                            <a href="{{ route('admin.users.show', $user) }}" class="btn btn-outline-info btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary btn-sm">
+                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                <button type="submit" class="btn btn-outline-danger btn-sm"
                                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>

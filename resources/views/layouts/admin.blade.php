@@ -66,7 +66,7 @@
         }
 
         .sidebar-header {
-            padding: 1.5rem;
+            padding: 1rem;
             background: rgba(255,255,255,0.1);
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
@@ -125,7 +125,7 @@
             position: sticky;
             top: 0;
             z-index: 998;
-            padding: 1rem 2rem;
+            padding: 1rem;
         }
 
         .navbar .dropdown-toggle {
@@ -311,6 +311,7 @@
                 margin-left: 0;
             }
 
+
             .main-content.active {
                 margin-left: 250px;
             }
@@ -329,16 +330,16 @@
         <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-header">
-                <div class="d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('images/logo.png') }}" alt="Agricarte" height="40" class="me-2">
-                    <span class="text-white fw-bold">AgriCarte</span>
-                </div>
+                <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
+                <img src="{{ asset('images/logo.jpg') }}" alt="AgriCarte Logo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                <span class="fw-bold text-white">AgriCarte</span>
+            </a>
             </div>
 
             <ul class="list-unstyled components">
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Tableau de bord</span>
                     </a>
@@ -352,18 +353,27 @@
                     Gestion
                 </div>
 
+                @if(auth()->user()->role === 'admin')
                 <!-- Nav Item - Products -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.products.index') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
                         <i class="fas fa-fw fa-box"></i>
                         <span>Produits</span>
                     </a>
                 </li>
+                @else
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('farmer.products.index') }}">
+                        <i class="fas fa-fw fa-box"></i>
+                        <span>Produits</span>
+                    </a>
+                </li>
+                @endif
 
                 @if(auth()->user()->role === 'admin')
                 <!-- Nav Item - Farmers -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.farmers.index') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('admin.farmers.index') }}">
                         <i class="fas fa-fw fa-user-tie"></i>
                         <span>Agriculteurs</span>
                     </a>
@@ -371,7 +381,7 @@
 
                 <!-- Nav Item - Categories -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.categories.index') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
                         <i class="fas fa-fw fa-tags"></i>
                         <span>Catégories</span>
                     </a>
@@ -379,7 +389,7 @@
 
                 <!-- Nav Item - Orders -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.orders.index') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
                         <i class="fas fa-fw fa-shopping-cart"></i>
                         <span>Commandes</span>
                     </a>
@@ -387,7 +397,7 @@
 
                 <!-- Nav Item - Users -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
                         <i class="fas fa-fw fa-users"></i>
                         <span>Utilisateurs</span>
                     </a>
@@ -397,7 +407,7 @@
                 @if(auth()->user()->role === 'farmer')
                 <!-- Nav Item - Farmer Orders -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('farmer.orders.index') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('farmer.orders.index') }}">
                         <i class="fas fa-fw fa-shopping-cart"></i>
                         <span>Mes Commandes</span>
                     </a>
@@ -414,7 +424,7 @@
 
                 <!-- Nav Item - Profile -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('profile') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('profile') }}">
                         <i class="fas fa-fw fa-user"></i>
                         <span>Profil</span>
                     </a>
@@ -422,7 +432,7 @@
 
                 <!-- Nav Item - Settings -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('settings') }}">
+                    <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('settings') }}">
                         <i class="fas fa-fw fa-cog"></i>
                         <span>Paramètres</span>
                     </a>

@@ -137,7 +137,7 @@
                                             <th>Nom</th>
                                             <th>Prix</th>
                                             <th>Stock</th>
-                                            <th>Statut</th>
+                                            <th>Vente</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -146,9 +146,9 @@
                                             <tr>
                                                 <td>{{ $product->name }}</td>
                                                 <td>{{ $product->price }} €</td>
-                                                <td>{{ $product->stock }}</td>
+                                                <td>{{ $product->stock_quantity }}</td>
                                                 <td>
-                                                    <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-danger' }}">
+                                                    <span class="badge {{ $product->is_featured ? 'bg-success' : 'bg-danger' }}">
                                                         {{ $product->is_active ? 'Actif' : 'Inactif' }}
                                                     </span>
                                                 </td>

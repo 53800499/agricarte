@@ -1,30 +1,38 @@
 @extends('layouts.admin')
 
-@section('title', 'Créer un producteur')
+@section('title', 'Créer un utilisateur')
 
 @section('content')
     <div class="container-fluid px-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="h3 mb-0 text-gray-800">Créer un producteur</h1>
+                <h1 class="h3 mb-0 text-gray-800">Créer un utilisateur</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Tableau de bord</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.farmers.index') }}">Producteurs</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Créer</li>
                     </ol>
                 </nav>
             </div>
             <div>
-                <a href="{{ route('admin.farmers.index') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-2"></i>Retour
                 </a>
             </div>
         </div>
 
-        <form action="{{ route('admin.farmers.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
+                @foreach (['success', 'info', 'warning', 'danger'] as $msg)
+            @if (session($msg))
+                <div class="alert alert-{{ $msg }} alert-dismissible fade show" role="alert">
+                    {{ session($msg) }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+        @endforeach
                 <div class="col-lg-4">
                     <!-- Photo de profil -->
                     <div class="card shadow mb-4">
@@ -65,6 +73,21 @@
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
                                     <label class="form-check-label" for="is_active">Compte actif</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Rôle</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                    <select class="form-select @error('role') is-invalid @enderror"
+                                            id="role" name="role" required>
+                                        <option value="user">Client</option>
+                                        <option value="farmer">Producteur</option>
+                                        <option value="admin">Administrateur</option>
+                                    </select>
+                                    @error('role')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -132,7 +155,7 @@
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                                         <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                               id="password" name="password" required>
+                                               id="password" name="password" value="{{ old('password') }}" required>
                                         @error('password')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -143,7 +166,7 @@
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                                         <input type="password" class="form-control"
-                                               id="password_confirmation" name="password_confirmation" required>
+                                               id="password_confirmation" value="{{ old('password_confirmation') }}" name="password_confirmation" required>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +231,7 @@
                     </div>
 
                     <!-- Informations du producteur -->
-                    <div class="card shadow mb-4">
+                    <div id="farmer-info" class="card shadow mb-4" style="display: none;">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">
                                 <i class="fas fa-tractor me-2"></i>Informations du producteur
@@ -252,45 +275,57 @@
 
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Créer le producteur
+                            <i class="fas fa-save me-2"></i>Créer l'utilisateur
                         </button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-@endsection
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Géocodage automatique de l'adresse
-    const addressInput = document.getElementById('address');
-    const cityInput = document.getElementById('city');
-    const postalCodeInput = document.getElementById('postal_code');
-    const countryInput = document.getElementById('country');
-    const latitudeInput = document.getElementById('latitude');
-    const longitudeInput = document.getElementById('longitude');
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const roleSelect = document.getElementById('role');
+                const farmerInfo = document.getElementById('farmer-info');
 
-    function updateCoordinates() {
-        const address = `${addressInput.value}, ${postalCodeInput.value} ${cityInput.value}, ${countryInput.value}`;
-        if (address.trim().length > 0) {
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data[0]) {
-                        latitudeInput.value = data[0].lat;
-                        longitudeInput.value = data[0].lon;
+                roleSelect.addEventListener('change', function() {
+                    farmerInfo.style.display = this.value === 'farmer' ? 'block' : 'none';
+                });
+
+                // Afficher les informations du producteur si le rôle est déjà sélectionné
+                if (roleSelect.value === 'farmer') {
+                    farmerInfo.style.display = 'block';
+                }
+
+                // Géolocalisation automatique
+                document.getElementById('address').addEventListener('blur', function() {
+                    if (this.value && document.getElementById('role').value === 'farmer') {
+                        const loadingIndicator = document.createElement('div');
+                        loadingIndicator.className = 'position-absolute end-0 top-50 translate-middle-y me-3';
+                        loadingIndicator.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"></div>';
+                        this.parentElement.appendChild(loadingIndicator);
+
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.value)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.length > 0) {
+                                    document.getElementById('latitude').value = data[0].lat;
+                                    document.getElementById('longitude').value = data[0].lon;
+                                    loadingIndicator.innerHTML = '<i class="fas fa-check text-success"></i>';
+                                    setTimeout(() => loadingIndicator.remove(), 2000);
+                                } else {
+                                    loadingIndicator.innerHTML = '<i class="fas fa-exclamation-triangle text-warning"></i>';
+                                    setTimeout(() => loadingIndicator.remove(), 2000);
+                                }
+                            })
+                            .catch(() => {
+                                loadingIndicator.innerHTML = '<i class="fas fa-times text-danger"></i>';
+                                setTimeout(() => loadingIndicator.remove(), 2000);
+                            });
                     }
-                })
-                .catch(error => console.error('Erreur de géocodage:', error));
-        }
-    }
-
-    // Écouter les changements sur les champs d'adresse
-    [addressInput, cityInput, postalCodeInput, countryInput].forEach(input => {
-        input.addEventListener('change', updateCoordinates);
-    });
-});
-</script>
-@endpush
+                });
+            });
+        </script>
+    @endpush
+@endsection

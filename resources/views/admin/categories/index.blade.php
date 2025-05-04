@@ -54,16 +54,16 @@
                                     <td>{{ $category->products->count() }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.categories.show', $category) }}" class="btn btn-info btn-sm">
+                                            {{-- <a href="{{ route('admin.categories.show', $category) }}" class="btn btn-outline-info btn-sm">
                                                 <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-primary btn-sm">
+                                            </a> --}}
+                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                <button type="submit" class="btn btn-outline-danger btn-sm"
                                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
