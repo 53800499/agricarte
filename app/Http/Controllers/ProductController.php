@@ -11,60 +11,58 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = Product::with(['category', 'user']);
+{
+    $query = Product::with(['category', 'user']);
 
-        // Si l'utilisateur est un agriculteur, ne montrer que ses produits
-        /* if (auth()->user()->role === 'farmer') {
-            $query->where('farmer_id', auth()->id());
-        } */
-
-        // Filtre par catégorie
-        if ($request->has('category')) {
-            $query->where('category_id', $request->category);
-        }
-
-        // Filtre par prix
-        if ($request->has('min_price')) {
-            $query->where('price', '>=', $request->min_price);
-        }
-        if ($request->has('max_price')) {
-            $query->where('price', '<=', $request->max_price);
-        }
-
-        // Filtre par recherche
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-
-        // Tri
-        if ($request->has('sort')) {
-            $sort = $request->sort;
-            switch ($sort) {
-                case 'price_asc':
-                    $query->orderBy('price', 'asc');
-                    break;
-                case 'price_desc':
-                    $query->orderBy('price', 'desc');
-                    break;
-                case 'name':
-                    $query->orderBy('name');
-                    break;
-                case 'latest':
-                    $query->latest();
-                    break;
-            }
-        }
-
-        $products = $query->paginate(12);
-        $categories = Category::all();
-
-        return view('products.index', compact('products', 'categories'));
+    // Filtre par catégorie
+    if ($request->filled('category')) {
+        $query->where('category_id', $request->category);
     }
+
+    // Filtre par prix minimum
+    if ($request->filled('min_price')) {
+        $query->where('price', '>=', $request->min_price);
+    }
+
+    // Filtre par prix maximum
+    if ($request->filled('max_price')) {
+        $query->where('price', '<=', $request->max_price);
+    }
+
+    // Filtre par recherche
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%");
+        });
+    }
+
+    // Tri
+    if ($request->filled('sort')) {
+        $sort = $request->sort;
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('name');
+                break;
+            case 'latest':
+                $query->latest();
+                break;
+        }
+    }
+
+    $products = $query->paginate(12);
+    $categories = Category::all();
+
+    return view('products.index', compact('products', 'categories'));
+}
+
 
     public function indexs()
     {
