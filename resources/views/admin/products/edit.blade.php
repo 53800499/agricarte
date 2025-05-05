@@ -100,9 +100,9 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @error('user_id')
+                                            {{-- @error('user_id')
                                                 <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            @enderror --}}
                                         </div>
                                     </div>
                                     @endif

@@ -51,8 +51,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('contact') ? 'active fw-bold' : '' }}" href="{{ route('contact') }}">
-                            <i class="fas fa-envelope me-1"></i> Contact
+                        <a class="nav-link {{ request()->routeIs('cart.index') ? 'active fw-bold' : '' }}" href="{{ route('cart.index') }}">
+                            <i class="fas fa-shopping-cart me-1"></i> Panier
                         </a>
                     </li>
                     @auth
@@ -65,8 +65,11 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2"></i>Mon profil</a></li>
                                 <li><a class="dropdown-item" href="{{ route('favorites') }}"><i class="fas fa-heart me-2"></i>Mes favoris</a></li>
+                                <li><a class="dropdown-item" href="{{ route('cart.index') }}"><i class="fas fa-shopping-cart me-2"></i>Panier</a></li>
+                                @if(Auth::user()->role == 'admin')
                                 <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
-                                @if(Auth::user()->name !== 'user')
+                                @endif
+                                @if(Auth::user()->role == 'farmer' || Auth::user()->role == 'admin')
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Tableau de bord</a></li>
                                 @endif

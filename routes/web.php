@@ -146,8 +146,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Paramètres admin
         Route::put('/admin/settings', [SettingController::class, 'update'])->name('settings.update');
-    });
         Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+    });
 
     /*
     |--------------------------------------------------------------------------

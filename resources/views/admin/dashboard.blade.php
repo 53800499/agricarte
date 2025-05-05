@@ -12,15 +12,17 @@
             </a>
         </div>
 
+            @if(Auth::user()->role == 'admin')
+                
         <!-- Content Row -->
         <div class="row">
             <!-- Earnings (Monthly) Card -->
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card border-left-primary shadow h-100 py-2 bg-primary text-white">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1">
                                     Produits</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalProducts }}</div>
                             </div>
@@ -34,7 +36,7 @@
 
             <!-- Earnings (Monthly) Card -->
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
+                <div class="card border-left-success shadow h-100 py-2 bg-info text-white">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
@@ -52,11 +54,11 @@
 
             <!-- Earnings (Monthly) Card -->
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
+                <div class="card border-left-info shadow h-100 py-2 bg-success text-white">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1">
                                     Agriculteurs</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalFarmers }}</div>
                             </div>
@@ -70,11 +72,11 @@
 
             <!-- Pending Requests Card -->
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card border-left-warning shadow h-100 py-2 bg-warning text-white">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1">
                                     Utilisateurs</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalUsers }}</div>
                             </div>
@@ -86,6 +88,47 @@
                 </div>
             </div>
         </div>
+            @endif
+            @if(Auth::user()->role == 'farmer')
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Earnings (Monthly) Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2  bg-primary text-white">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                    Produits</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalProducts }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-box fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2 bg-info text-white">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                    Commandes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalOrders }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            @endif
 
         <!-- Content Row -->
         <div class="row">

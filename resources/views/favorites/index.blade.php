@@ -1,15 +1,34 @@
 @extends('layouts.app')
 
 @section('title', 'Mes Favoris')
-
+@push('styles')
+    <style>
+        .producer-hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/slide1.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        color: white;
+        margin-top: -76px;
+    }
+    </style>
+@endpush
 @section('content')
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-5 fw-bold">Mes Favoris</h1>
-            <p class="lead text-muted">Retrouvez ici tous vos produits favoris</p>
+<!-- Hero Section -->
+    <section class="producer-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">Mes Favoris</h1>
+                    <p class="lead">Retrouvez ici tous vos produits favoris
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+<div class="container py-5">
 
     @if($favorites->isEmpty())
         <div class="text-center py-5">

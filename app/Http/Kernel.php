@@ -83,5 +83,6 @@ class Kernel extends HttpKernel
         'email.verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'farmer' => \App\Http\Middleware\FarmerMiddleware::class,
+        'dashboard.access' => \App\Http\Middleware\DashboardAccessMiddleware::class,
     ];
 }

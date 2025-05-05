@@ -14,35 +14,61 @@ use Illuminate\Support\Facades\Validator;
 class DashboardController extends Controller
 {
     public function index()
-    {
-        // Statistiques de base
-        $totalOrders = Order::count();
-        $totalProducts = Product::count();
-        $totalFarmers = User::where('role', 'farmer')->count();
-        $totalUsers = User::where('role', 'customer')->count();
+{
+    $user = auth()->user();
 
-        // Statistiques des produits
-        $productsInStock = Product::where('is_available', true)->count();
-        $productsSold = Order::where('status', 'completed')->sum('total');
-        $productsPending = Product::where('is_available', false)->count();
+    // Valeurs par défaut (admin)
+    $totalOrders = Order::count();
+    $totalProducts = Product::count();
+    $totalFarmers = User::where('role', 'farmer')->count();
+    $totalUsers = User::where('role', 'customer')->count();
 
-        // Dernières commandes
+    $productsInStock = Product::where('is_available', true)->count();
+    $productsSold = Order::where('status', 'completed')->sum('total');
+    $productsPending = Product::where('is_available', false)->count();
+
+    $recentOrders = Order::with('user')->latest()->take(10)->get();
+
+    // Si l'utilisateur est un agriculteur, filtrer ses données uniquement
+    if ($user->role === 'farmer') {
+        $totalOrders = Order::where('user_id', $user->id)->count();
+        $totalProducts = Product::where('user_id', $user->id)->count();
+
+        // Le reste n’a pas forcément de sens pour un fermier, on peut le neutraliser ou l’adapter :
+        $totalFarmers = 1; // lui-même
+        $totalUsers = 0;
+
+        $productsInStock = Product::where('user_id', $user->id)
+                                  ->where('is_available', true)
+                                  ->count();
+
+        $productsSold = Order::where('user_id', $user->id)
+                             ->where('status', 'completed')
+                             ->sum('total');
+
+        $productsPending = Product::where('user_id', $user->id)
+                                  ->where('is_available', false)
+                                  ->count();
+
         $recentOrders = Order::with('user')
+            ->where('user_id', $user->id)
             ->latest()
             ->take(10)
             ->get();
-
-        return view('admin.dashboard', compact(
-            'totalOrders',
-            'totalProducts',
-            'totalFarmers',
-            'totalUsers',
-            'productsInStock',
-            'productsSold',
-            'productsPending',
-            'recentOrders'
-        ));
     }
+
+    return view('admin.dashboard', compact(
+        'totalOrders',
+        'totalProducts',
+        'totalFarmers',
+        'totalUsers',
+        'productsInStock',
+        'productsSold',
+        'productsPending',
+        'recentOrders'
+    ));
+}
+
     public function showProfil(Request $request, $user)
     {
         $user = User::find($user);

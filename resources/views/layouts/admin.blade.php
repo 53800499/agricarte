@@ -429,14 +429,16 @@
                         <span>Profil</span>
                     </a>
                 </li>
-
+                @if(Auth::user()->role === 'admin')
                 <!-- Nav Item - Settings -->
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('farmers.*') ? 'active' : '' }}" href="{{ route('settings') }}">
                         <i class="fas fa-fw fa-cog"></i>
                         <span>Paramètres</span>
                     </a>
-                </li>
+                </li>    
+                @endif
+                
             </ul>
         </nav>
 
@@ -452,7 +454,7 @@
                     <div class="d-flex align-items-center ms-auto">
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                                <img src="{{ Auth::user()->avatar ?? asset('images/default-avatar.png') }}"
+                                <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('images/default-avatar.png') }}"
                                      alt="{{ Auth::user()->name }}"
                                      class="rounded-circle me-2"
                                      width="32" height="32">
