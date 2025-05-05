@@ -55,7 +55,7 @@
                             <i class="fas fa-shopping-cart me-1"></i>
                             <span>Panier</span>
                             @if($cartCount > 0)
-                                <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-success">
+                                <span class="position-absolute top-1 translate-middle badge rounded-pill bg-success">
                                     {{ $cartCount }}
                                     <span class="visually-hidden">articles dans le panier</span>
                                 </span>
