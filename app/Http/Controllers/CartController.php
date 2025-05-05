@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -41,6 +42,7 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
+        Log::info($cart);
 
         return redirect()->back()->with('success', 'Produit ajouté au panier avec succès.');
     }

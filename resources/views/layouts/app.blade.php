@@ -65,7 +65,8 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2"></i>Mon profil</a></li>
                                 <li><a class="dropdown-item" href="{{ route('favorites') }}"><i class="fas fa-heart me-2"></i>Mes favoris</a></li>
-                                <li><a class="dropdown-item" href="{{ route('cart.index') }}"><i class="fas fa-shopping-cart me-2"></i>Panier</a></li>
+                                <li><a class="dropdown-item" href="{{ route('cart.index') }}"><i class="fas fa-shopping-cart me-2"></i>Panier</a>@if($cartCount >0)<span class="badge text-danger">{{ $cartCount }}</span>@endif
+                                </li>
                                 @if(Auth::user()->role == 'admin')
                                 <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
                                 @endif
