@@ -10,7 +10,7 @@
                 <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-primary">
                     <i class="fas fa-edit"></i> Modifier
                 </a>
-                <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
+                <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.index', $product) : route('farmer.products.index', $product) }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Retour
                 </a>
             </div>
@@ -25,7 +25,7 @@
                             <!-- Image -->
                             <div class="col-md-4">
                                 @if($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}"
+                                    <img src="{{ asset('storage/products/' . $product->image) }}"
                                          class="img-fluid rounded"
                                          alt="{{ $product->name }}"
                                          style="max-height: 300px; width: 100%; object-fit: cover;">
@@ -132,10 +132,10 @@
                     </div>
                     <div class="card-body">
                         <div class="d-grid gap-2">
-                            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-primary">
+                            <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.edit', $product) : route('farmer.products.edit', $product) }}" class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Modifier le produit
                             </a>
-                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="d-inline">
+                            <form action="{{ Auth()->user()->role=='admin' ? route('admin.products.destroy', $product) : route('farmer.products.destroy', $product) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger w-100"

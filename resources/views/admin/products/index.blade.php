@@ -15,7 +15,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 mb-0 text-gray-800">Gestion des Produits</h1>
-            <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
+            <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.create') : route('farmer.products.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Ajouter un produit
             </a>
         </div>
@@ -23,7 +23,7 @@
         <!-- Filtres -->
         <div class="card shadow mb-4">
             <div class="card-body">
-                <form action="{{ route('admin.products.index') }}" method="GET" class="row g-3">
+                <form action="{{ Auth()->user()->role=='admin' ? route('admin.products.index') : route('farmer.products.index') }}" method="GET" class="row g-3">
                     <div class="col-md-3">
                         <label for="search" class="form-label">Recherche</label>
                         <input type="text" class="form-control" id="search" name="search"
@@ -71,7 +71,7 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-filter"></i> Filtrer
                         </button>
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
+                        <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.index') : route('farmer.products.index') }}" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Réinitialiser
                         </a>
                     </div>
@@ -128,15 +128,15 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.products.show', $product) }}"
+                                            <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.show', $product) : route('farmer.products.show', $product) }}"
                                                class="btn btn-sm btn-outline-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.products.edit', $product) }}"
+                                            <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.edit', $product) : route('farmer.products.edit', $product) }}"
                                                class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.products.destroy', $product) }}"
+                                            <form action="{{ Auth()->user()->role=='admin' ? route('admin.products.destroy', $product) : route('farmer.products.destroy', $product) }}"
                                                   method="POST"
                                                   class="d-inline"
                                                   onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">

@@ -6,7 +6,7 @@
     <div class="container-fluid px-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 mb-0 text-gray-800">Modifier le Produit</h1>
-            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary btn-icon-split">
+            <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.index', $product) : route('farmer.products.index', $product) }}" class="btn btn-secondary btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-arrow-left"></i>
                 </span>
@@ -19,7 +19,7 @@
                 <h5 class="m-0 font-weight-bold">Modifier les détails du produit</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <form action="{{ Auth()->user()->role=='admin' ? route('admin.products.update', $product) : route('farmer.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     @method('PUT')
 
@@ -234,7 +234,7 @@
                                 <div class="d-flex align-items-center">
                                     @if($product->image)
                                         <div class="position-relative me-3">
-                                            <img src="{{ asset('storage/' . $product->image) }}"
+                                            <img src="{{ asset('storage/products/' . $product->image) }}"
                                                  alt="Image principale actuelle"
                                                  class="img-thumbnail rounded-lg shadow-sm"
                                                  style="width: 150px; height: 150px; object-fit: cover;">
