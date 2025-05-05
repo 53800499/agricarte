@@ -80,7 +80,7 @@ class OrderController extends Controller
 
     public function create()
     {
-        $users = User::where('role', 'customer')->get();
+        $users = User::where('role', 'user')->get();
         $products = Product::where('is_active', true)->get();
         return view('admin.orders.create', compact('users', 'products'));
     }
@@ -144,7 +144,7 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        $users = User::where('role', 'customer')->get();
+        $users = User::where('role', 'user')->get();
         $products = Product::where('is_active', true)->get();
         $order->load('products');
         return view('admin.orders.edit', compact('order', 'users', 'products'));

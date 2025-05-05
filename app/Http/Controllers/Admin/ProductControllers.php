@@ -18,7 +18,7 @@ class ProductControllers extends Controller
 
         // Si l'utilisateur est un agriculteur, ne montrer que ses produits
         if (auth()->user()->role === 'farmer') {
-            $query->where('farmer_id', auth()->id());
+            $query->where('user_id', auth()->id());
         }
         // Filtre par recherche
         if ($request->has('search')) {

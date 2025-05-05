@@ -128,7 +128,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isCustomer(): bool
     {
-        return $this->role === 'customer';
+        return $this->role === 'user';
     }
 
     /**
@@ -171,6 +171,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeCustomers($query)
     {
-        return $query->where('role', 'customer');
+        return $query->where('role', 'user');
     }
 }

@@ -224,12 +224,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // Routes pour les producteurs
 Route::middleware(['auth', 'farmer'])->prefix('farmer')->name('farmer.')->group(function () {
     // Produits
-    Route::get('/products', [FarmerController::class, 'index'])->name('products.index');
-    Route::get('/products/create', [FarmerController::class, 'create'])->name('products.create');
-    Route::post('/products', [FarmerController::class, 'store'])->name('products.store');
-    Route::get('/products/{product}/edit', [FarmerController::class, 'edit'])->name('products.edit');
-    Route::put('/products/{product}', [FarmerController::class, 'update'])->name('products.update');
-    Route::delete('/products/{product}', [FarmerController::class, 'destroy'])->name('products.destroy');
+    Route::get('/products', [ProductControllers::class, 'index'])->name('products.index');
+    Route::get('/products/create', [ProductControllers::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductControllers::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [ProductControllers::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductControllers::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductControllers::class, 'destroy'])->name('products.destroy');
 
     // Commandes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

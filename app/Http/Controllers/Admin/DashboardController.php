@@ -21,7 +21,7 @@ class DashboardController extends Controller
     $totalOrders = Order::count();
     $totalProducts = Product::count();
     $totalFarmers = User::where('role', 'farmer')->count();
-    $totalUsers = User::where('role', 'customer')->count();
+    $totalUsers = User::where('role', 'user')->count();
 
     $productsInStock = Product::where('is_available', true)->count();
     $productsSold = Order::where('status', 'completed')->sum('total');

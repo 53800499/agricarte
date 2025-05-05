@@ -48,7 +48,7 @@
                                                 @case('farmer')
                                                     bg-success
                                                     @break
-                                                @case('customer')
+                                                @case('user')
                                                     bg-primary
                                                     @break
                                             @endswitch
