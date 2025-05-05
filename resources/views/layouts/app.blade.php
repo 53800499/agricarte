@@ -50,11 +50,19 @@
                             <i class="fas fa-map-marker-alt me-1"></i> Carte
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('cart.index') ? 'active fw-bold' : '' }}" href="{{ route('cart.index') }}">
-                            <i class="fas fa-shopping-cart me-1"></i> Panier
+                    <li class="nav-item position-relative">
+                        <a class="nav-link d-flex align-items-center {{ request()->routeIs('cart.index') ? 'active fw-bold' : '' }}" href="{{ route('cart.index') }}">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            <span>Panier</span>
+                            @if($cartCount > 0)
+                                <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-success">
+                                    {{ $cartCount }}
+                                    <span class="visually-hidden">articles dans le panier</span>
+                                </span>
+                            @endif
                         </a>
                     </li>
+
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
@@ -65,7 +73,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2"></i>Mon profil</a></li>
                                 <li><a class="dropdown-item" href="{{ route('favorites') }}"><i class="fas fa-heart me-2"></i>Mes favoris</a></li>
-                                <li><a class="dropdown-item" href="{{ route('cart.index') }}"><i class="fas fa-shopping-cart me-2"></i>Panier</a>@if($cartCount >0)<span class="badge text-danger">{{ $cartCount }}</span>@endif
+                                <li><a class="dropdown-item" href="{{ route('cart.index') }}"><i class="fas fa-shopping-cart me-2"></i>Panier</a>
                                 </li>
                                 @if(Auth::user()->role == 'admin')
                                 <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
