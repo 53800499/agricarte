@@ -24,6 +24,7 @@ use App\Http\Controllers\UserSettingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -155,7 +156,7 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::prefix('farmer')->middleware('farmer')->group(function () {
         // Produits de l'agriculteur
-        Route::get('/products', [ProductController::class, 'index'])->name('farmer.products.index');
+        Route::get('/products', [ProductControllers::class, 'index'])->name('farmer.products.index');
         Route::get('/products/create', [ProductController::class, 'create'])->name('farmer.products.create');
         Route::post('/products', [ProductController::class, 'store'])->name('farmer.products.store');
         Route::get('/products/{product}', [ProductController::class, 'show'])->name('farmer.products.show');
@@ -220,23 +221,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
 });
 
-// Routes pour les agriculteurs (espace agriculteur)
+// Routes pour les producteurs
 Route::middleware(['auth', 'farmer'])->prefix('farmer')->name('farmer.')->group(function () {
-    // Produits de l'agriculteur
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    // Produits
+    Route::get('/products', [FarmerController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [FarmerController::class, 'create'])->name('products.create');
+    Route::post('/products', [FarmerController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [FarmerController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [FarmerController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [FarmerController::class, 'destroy'])->name('products.destroy');
 
-    // Commandes de l'agriculteur
+    // Commandes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
-    // Profil de l'agriculteur
+    // Profil
     Route::get('/profile', [FarmerController::class, 'show'])->name('profile');
     Route::put('/profile', [FarmerController::class, 'update'])->name('profile.update');
 });
@@ -250,4 +250,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+
+    // Routes de commande
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 });

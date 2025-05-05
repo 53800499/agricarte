@@ -21,6 +21,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         padding: 2rem;
         margin-bottom: 2rem;
+        margin-top: -100px;
     }
 
     .product-card {
@@ -148,63 +149,35 @@
 
         <!-- Products Grid -->
         <div class="row">
-            @forelse($products as $product)
-            <div class="col-md-4 col-lg-3 mb-4 product-card" 
-                 data-category="{{ $product->category_id ?? '' }}"
-                 data-price="{{ $product->price ?? 0 }}"
-                 data-organic="{{ $product->is_organic ? '1' : '0' }}"
-                 data-featured="{{ $product->is_featured ? '1' : '0' }}">
-                <div class="p-2 h-100 border-0 ">
-                    <div class="position-relative">
-                        <img src="{{ $product->image ? asset('storage/products/' . $product->image) : asset('images/products/logo.jpg') }}" 
-                             class="card-img-top" 
-                             alt="{{ $product->name }}"
-                             style="height: 200px; object-fit: cover;">
-                        <div class="position-absolute top-0 end-0 p-2">
-                            @if($product->is_organic)
-                                <span class="badge bg-success">Bio</span>
-                            @endif
-                            @if($product->is_featured)
-                                <span class="badge bg-warning">En vedette</span>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="card-body pt-2">
-                        <h5 class="card-title">{{ $product->name }}</h5>
-                        <p class="text-muted small">{{ $product->category->name ?? 'Non catégorisé' }}</p>
-                        <div class="d-flex justify-content-between align-items-cente mt-0r">
-                            <span class="h5 text-primary mb-0">{{ number_format($product->price ?? 0, 2) }}€</span>
-                            <span class="badge bg-{{ ($product->stock_quantity ?? 0) > 0 ? 'success' : 'danger' }}">
-                                {{ ($product->stock_quantity ?? 0) > 0 ? 'En stock' : 'Rupture' }}
-                            </span>
-                        </div>
-                        <p class="card-text small text-muted">
-                            {{ Str::limit($product->description ?? '', 100) }}
-                        </p>
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="{{ isset($product->user->profile_photo) ? asset('storage/profile_images/' . $product->user->profile_photo) : asset('images/logo.jpg') }}" 
-                                 class="rounded-circle me-2" 
-                                 style="width: 30px; height: 30px; object-fit: cover;"
-                                 alt="{{ $product->user->name ?? 'Agriculteur' }}">
-                            <small class="text-muted">{{ $product->user->name ?? 'Agriculteur' }}</small>
-                        </div>
-                        <div class="d-grid">
-                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-outline-success">
-                                Voir le produit
-                            </a>
+            @foreach($products as $product)
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="card product-card h-100">
+                        <img src="{{ asset('storage/products/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
+                        <div class="category-badge">{{ $product->category->name }}</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $product->name }}</h5>
+                            <p class="card-text text-muted">{{ Str::limit($product->description, 100) }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0 text-success">{{ number_format($product->price, 2) }} €</span>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('products.show', $product) }}" class="btn btn-outline-success">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <form action="{{ route('cart.add', $product) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('favorites.toggle', $product) }}" class="btn btn-outline-danger favorite-toggle">
+                                        <i class="{{ auth()->check() && auth()->user()->favorites && auth()->user()->favorites->contains($product) ? 'fas' : 'far' }} fa-heart"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div class="col-12">
-                <div class="text-center py-5">
-                    <img src="{{ asset('images/empty-products.svg') }}" alt="Aucun produit" class="mb-4" style="max-width: 200px;">
-                    <h4 class="text-muted">Aucun produit trouvé</h4>
-                    <p class="text-muted">Essayez de modifier vos critères de recherche</p>
-                </div>
-            </div>
-        @endforelse
+                @endforeach
         </div>
 
         <!-- Pagination -->

@@ -33,6 +33,7 @@ class Order extends Model
             ->withPivot('quantity', 'price')
             ->withTimestamps();
     }
+
     public function orders()
     {
         return $this->belongsToMany(Order::class);

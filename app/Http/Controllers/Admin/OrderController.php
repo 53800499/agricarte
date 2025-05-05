@@ -11,9 +11,11 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::with(['user', 'products']);
-        // Si l'utilisateur est un agriculteur, ne montrer que ses produits
+        // Si l'utilisateur est un agriculteur, ne montrer que les commandes contenant ses produits
         if (auth()->user()->role === 'farmer') {
-            $orders->where('farmer_id', auth()->id());
+            $orders->whereHas('products', function($query) {
+                $query->where('user_id', auth()->id());
+            });
         }
         $orders = $orders->latest()->paginate(10);
         return view('admin.orders.index', compact('orders'));

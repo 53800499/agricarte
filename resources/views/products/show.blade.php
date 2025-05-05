@@ -1,194 +1,420 @@
 @extends('layouts.app')
 
-@section('title', $product->name)
+@section('title', $product->name . ' - AgriCarte')
 
 @push('styles')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
-    #map {
+    .product-hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/slide1.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        color: white;
+        margin-top: -76px;
+    }
+
+    .product-gallery {
+        margin-top: -100px;
+    }
+
+    .main-image {
+        width: 100%;
         height: 400px;
-        border-radius: 10px;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    .product-image {
-        max-height: 400px;
-        width: 100%;
+
+    .thumbnail {
+        width: 80px;
+        height: 80px;
         object-fit: cover;
         border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
     }
-    .farmer-card {
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
+
+    .thumbnail:hover {
+        transform: scale(1.05);
+        border-color: var(--primary-color);
     }
-    .farmer-card:hover {
-        transform: translateY(-5px);
+
+    .product-info {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
-    .farmer-image {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #4CAF50;
+
+    .product-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark-color);
+        margin-bottom: 15px;
     }
-    .badge-stock {
+
+    .product-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .product-category {
+        background: var(--primary-color);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
         font-size: 0.9rem;
-        padding: 0.5rem 1rem;
     }
+
+    .product-rating {
+        color: var(--warning-color);
+        font-size: 1rem;
+    }
+
+    .product-reviews {
+        color: var(--gray-color);
+        font-size: 0.9rem;
+    }
+
+    .product-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+    }
+
+    .product-description {
+        color: var(--gray-color);
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .product-stats {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--gray-color);
+    }
+
+    .stat-item i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--light-color);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: var(--dark-color);
+        transition: all 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .quantity-input {
+        width: 60px;
+        text-align: center;
+        border: none;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 15px;
+    }
+
+    .btn-add-cart {
+        flex: 1;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add-cart:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .btn-favorite {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        background: var(--light-color);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-color);
+        transition: all 0.3s ease;
+    }
+
+    .btn-favorite:hover {
+        background: var(--danger-color);
+        color: white;
+    }
+
+    .producer-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .producer-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .producer-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .producer-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 5px;
+    }
+
+    .producer-location {
+        color: var(--gray-color);
+        font-size: 0.9rem;
+    }
+
+    .producer-contact {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
     .contact-btn {
-        width: 100%;
+        flex: 1;
         padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-call {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .btn-message {
+        background: var(--light-color);
+        color: var(--dark-color);
+    }
+
+    .contact-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .map-container {
+        height: 200px;
+        border-radius: 15px;
+        overflow: hidden;
+        margin-top: 20px;
     }
 </style>
 @endpush
 
 @section('content')
-<div class="container py-5">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}">Accueil</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produits</a></li>
-            <li class="breadcrumb-item active">{{ $product->name }}</li>
-        </ol>
-    </nav>
-
-    <div class="row g-4">
-        <!-- Colonne de gauche : Image et détails du produit -->
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <img src="{{ asset('storage/' . $product->image) }}"
-                         alt="{{ $product->name }}"
-                         class="product-image mb-4">
-
-                    <h1 class="h2 mb-4">{{ $product->name }}</h1>
-
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div>
-                            <span class="badge bg-primary me-2">{{ $product->category->name }}</span>
-                            @if($product->stock_quantity > 0)
-                                <span class="badge bg-success badge-stock">
-                                    En stock : {{ $product->stock_quantity }} {{ $product->unit }}
-                                </span>
-                            @else
-                                <span class="badge bg-danger badge-stock">Rupture de stock</span>
-                            @endif
-                        </div>
-                        <h3 class="text-primary mb-0">{{ number_format($product->price, 2, ',', ' ') }} €</h3>
-                    </div>
-
-                    <div class="mb-4">
-                        <h4>Description</h4>
-                        <p class="text-muted">{{ $product->description }}</p>
-                    </div>
-
-                    @if($product->stock_quantity > 0)
-                        <form action="{{ route('cart.add', $product) }}" method="POST" class="d-flex align-items-center">
-                            @csrf
-                            <div class="input-group me-3" style="max-width: 200px;">
-                                <span class="input-group-text">Quantité</span>
-                                <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{ $product->stock_quantity }}">
-                                <span class="input-group-text">{{ $product->unit }}</span>
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-shopping-cart me-2"></i>
-                                Ajouter au panier
-                            </button>
-                        </form>
-                    @endif
+    <!-- Hero Section -->
+    <section class="product-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">{{ $product->name }}</h1>
+                    <p class="lead">{{ $product->category->name }}</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Colonne de droite : Informations du producteur et carte -->
-        <div class="col-lg-4">
-            <!-- Carte du producteur -->
-            <div class="card farmer-card mb-4">
-                <div class="card-body text-center">
-                    <img src="{{ asset('storage/' . $product->user->profile_image) }}"
-                         alt="{{ $product->user->name }}"
-                         class="farmer-image mb-3">
-
-                    <h4>{{ $product->user->name }}</h4>
-                    <p class="text-muted mb-3">Producteur local</p>
-
-                    <div class="d-grid gap-2">
-                        <a href="tel:{{ $product->user->phone }}" class="btn btn-outline-primary contact-btn">
-                            <i class="fas fa-phone me-2"></i>{{ $product->user->phone }}
-                        </a>
-                        <a href="mailto:{{ $product->user->email }}" class="btn btn-outline-primary contact-btn">
-                            <i class="fas fa-envelope me-2"></i>Contacter par email
-                        </a>
+    <div class="container">
+        <div class="row">
+            <!-- Product Gallery -->
+            <div class="col-lg-8">
+                <div class="product-gallery">
+                    <img src="{{ $product->image ? asset('storage/products/' . $product->image) : asset('images/default-product.jpg') }}"
+                         alt="{{ $product->name }}"
+                         class="main-image mb-3">
+                    <div class="d-flex gap-2">
+                        @if($product->images)
+                            @foreach($product->images as $image)
+                                <img src="{{ asset('storage/' . $image->path) }}"
+                                     alt="{{ $product->name }}"
+                                     class="thumbnail">
+                            @endforeach
+                        @endif
                     </div>
-
-                    @if($product->user->description)
-                        <div class="mt-3">
-                            <h5>À propos</h5>
-                            <p class="text-muted">{{ $product->user->description }}</p>
-                        </div>
-                    @endif
                 </div>
             </div>
 
-            <!-- Carte de localisation -->
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="mb-3">Localisation</h4>
-                    <div id="map"></div>
-                    <p class="mt-3 mb-0">
-                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                        {{ $product->user->address }}, {{ $product->user->postal_code }} {{ $product->user->city }}
-                    </p>
+            <!-- Product Info -->
+            <div class="col-lg-4">
+                <div class="product-info">
+                    <h1 class="product-title">{{ $product->name }}</h1>
+                    <div class="product-meta">
+                        <span class="product-category">{{ $product->category->name }}</span>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="product-reviews">(12 avis)</span>
+                    </div>
+                    <div class="product-price">
+                        {{ number_format($product->price, 0, ',', ' ') }} FCFA
+                        <span class="unit-badge">/ {{ $product->unit }}</span>
+                    </div>
+                    <p class="product-description">{{ $product->description }}</p>
+                    <div class="product-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-box"></i>
+                            <span>{{ $product->stock_quantity }} en stock</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Livraison gratuite</span>
+                        </div>
+                    </div>
+                    <div class="quantity-control">
+                        <button class="quantity-btn" id="decrease">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="{{ $product->stock_quantity }}">
+                        <button class="quantity-btn" id="increase">+</button>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-add-cart">
+                            <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
+                        </button>
+                        <button class="btn-favorite">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producer Info -->
+                <div class="producer-card mt-4">
+                    <div class="producer-header">
+                        <img src="{{ $product->user->profile_image ? asset('storage/' . $product->user->profile_image) : asset('images/default-farmer.jpg') }}"
+                             alt="{{ $product->user->name }}"
+                             class="producer-avatar">
+                        <div>
+                            <h3 class="producer-name">{{ $product->user->name }}</h3>
+                            <p class="producer-location">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                {{ $product->user->address }}
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-muted">{{ $product->user->description }}</p>
+                    <div class="producer-contact">
+                        <a href="tel:{{ $product->user->phone }}" class="btn contact-btn btn-call">
+                            <i class="fas fa-phone me-2"></i>Appeler
+                        </a>
+                        <a href="mailto:{{ $product->user->email }}" class="btn contact-btn btn-message">
+                            <i class="fas fa-envelope me-2"></i>Message
+                        </a>
+                    </div>
+                    <div class="map-container" id="map"></div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('scripts')
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialisation de la carte
-        const map = L.map('map').setView([{{ $product->user->latitude }}, {{ $product->user->longitude }}], 13);
+        // Quantity control
+        const decreaseBtn = document.getElementById('decrease');
+        const increaseBtn = document.getElementById('increase');
+        const quantityInput = document.querySelector('.quantity-input');
 
-        // Ajout de la couche OpenStreetMap
+        decreaseBtn.addEventListener('click', () => {
+            let value = parseInt(quantityInput.value);
+            if (value > 1) {
+                quantityInput.value = value - 1;
+            }
+        });
+
+        increaseBtn.addEventListener('click', () => {
+            let value = parseInt(quantityInput.value);
+            if (value < {{ $product->stock_quantity }}) {
+                quantityInput.value = value + 1;
+            }
+        });
+
+        // Initialize map
+        const map = L.map('map').setView([{{ $product->user->latitude }}, {{ $product->user->longitude }}], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Ajout du marqueur pour la position du producteur
-        L.marker([{{ $product->user->latitude }}, {{ $product->user->longitude }}])
-            .addTo(map)
-            .bindPopup("{{ $product->user->name }}<br>{{ $product->user->address }}")
-            .openPopup();
+        const marker = L.marker([{{ $product->user->latitude }}, {{ $product->user->longitude }}], {
+            icon: L.divIcon({
+                className: 'producer-marker',
+                html: '<i class="fas fa-map-marker-alt fa-2x text-primary"></i>'
+            })
+        }).addTo(map);
 
-        // Si la géolocalisation est disponible, on peut ajouter la position de l'utilisateur
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
+        marker.bindPopup(`
+            <div class="p-2">
+                <h6>{{ $product->user->name }}</h6>
+                <p class="mb-0">{{ $product->user->address }}</p>
+            </div>
+        `);
 
-                // Ajout du marqueur pour la position de l'utilisateur
-                L.marker([userLat, userLng], {
-                    icon: L.divIcon({
-                        className: 'user-marker',
-                        html: '<i class="fas fa-user-circle fa-2x text-primary"></i>'
-                    })
-                }).addTo(map)
-                .bindPopup("Votre position")
-                .openPopup();
+        // Image gallery
+        const mainImage = document.querySelector('.main-image');
+        const thumbnails = document.querySelectorAll('.thumbnail');
 
-                // Ajustement de la vue pour montrer les deux marqueurs
-                const bounds = L.latLngBounds(
-                    [userLat, userLng],
-                    [{{ $product->user->latitude }}, {{ $product->user->longitude }}]
-                );
-                map.fitBounds(bounds, { padding: [50, 50] });
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                mainImage.src = thumbnail.src;
             });
-        }
+        });
     });
 </script>
 @endpush

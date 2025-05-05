@@ -27,7 +27,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="justify-content-center text-center my-1">
-                                <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('images/logo.jpg') }}"
+                                <img src="{{ $user->profile_image ? asset('storage/profile_images/' . $user->profile_image) : asset('images/logo.jpg') }}"
                                     alt="Photo de {{ $user->name }}" class="rounded img-thumbnail" width="150" height="150">
                             </div>
                             <input type="file" class="form-control @error('profile_image') is-invalid @enderror"
