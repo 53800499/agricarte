@@ -16,7 +16,7 @@
     }
 
     .product-gallery {
-        margin-top: -100px;
+        margin-top: 2em;
     }
 
     .main-image {
@@ -320,13 +320,17 @@
                     </div>
                     <div class="quantity-control">
                         <button class="quantity-btn" id="decrease">-</button>
-                        <input type="number" class="quantity-input" value="1" min="1" max="{{ $product->stock_quantity }}">
+                        <input type="number" class="quantity-input" name="quantity" value="1" min="1" max="{{ $product->stock_quantity }}">
                         <button class="quantity-btn" id="increase">+</button>
                     </div>
                     <div class="product-actions">
-                        <button class="btn btn-add-cart">
-                            <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
-                        </button>
+                        <form action="{{ route('cart.add', $product) }}" method="POST" class="d-inline">
+                            @csrf
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </form>
                         <button class="btn-favorite">
                             <i class="fas fa-heart"></i>
                         </button>
@@ -367,23 +371,36 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Quantity control
         const decreaseBtn = document.getElementById('decrease');
         const increaseBtn = document.getElementById('increase');
         const quantityInput = document.querySelector('.quantity-input');
+        const hiddenQuantityInput = document.getElementById('quantity-input');
+        const maxQuantity = {{ $product->stock_quantity }};
 
-        decreaseBtn.addEventListener('click', () => {
+        decreaseBtn.addEventListener('click', function() {
             let value = parseInt(quantityInput.value);
             if (value > 1) {
-                quantityInput.value = value - 1;
+                value--;
+                quantityInput.value = value;
+                hiddenQuantityInput.value = value;
             }
         });
 
-        increaseBtn.addEventListener('click', () => {
+        increaseBtn.addEventListener('click', function() {
             let value = parseInt(quantityInput.value);
-            if (value < {{ $product->stock_quantity }}) {
-                quantityInput.value = value + 1;
+            if (value < maxQuantity) {
+                value++;
+                quantityInput.value = value;
+                hiddenQuantityInput.value = value;
             }
+        });
+
+        quantityInput.addEventListener('change', function() {
+            let value = parseInt(this.value);
+            if (value < 1) value = 1;
+            if (value > maxQuantity) value = maxQuantity;
+            this.value = value;
+            hiddenQuantityInput.value = value;
         });
 
         // Initialize map

@@ -83,7 +83,7 @@
                             <span class="fw-bold">Total</span>
                             <span class="fw-bold">{{ number_format($total, 2) }}€</span>
                         </div>
-                        <a href="{{ route('checkout') }}" class="btn btn-success w-100 mb-3">
+                        <a href="{{ route('checkout.index') }}" class="btn btn-success w-100 mb-3">
                             <i class="fas fa-shopping-bag me-2"></i>Passer la commande
                         </a>
                         <form action="{{ route('cart.clear') }}" method="POST">

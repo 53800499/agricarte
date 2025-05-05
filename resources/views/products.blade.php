@@ -221,10 +221,14 @@
                         </div>
                         <div class="card-footer bg-white border-top-0">
                             <div class="d-flex justify-content-between">
-                                <a href="#" class="btn btn-sm btn-outline-success">Voir détails</a>
-                                <button class="btn btn-sm btn-success">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </button>
+                                <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-outline-success">Voir détails</a>
+                                <form action="{{ route('cart.add', $product) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

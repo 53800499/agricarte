@@ -218,7 +218,6 @@
     .map-section {
         position: relative;
         height: 600px;
-        margin: 4rem 0;
     }
 
     #map {
@@ -340,24 +339,30 @@
     <!-- Features Section -->
     <section class="features-section py-5">
         <div class="container">
-            <div class="row">
+            <div class="row align-content-center">
                 <div class="col-md-4 mb-4">
                     <div class="feature-card text-center p-4">
-                        <i class="fas fa-map-marker-alt fa-3x mb-3 text-success"></i>
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-map-marker-alt fa-2x text-success"></i>
+                        </div>
                         <h3>Localisation</h3>
                         <p>Trouvez les producteurs près de chez vous</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="feature-card text-center p-4">
-                        <i class="fas fa-leaf fa-3x mb-3 text-success"></i>
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-leaf fa-2x text-success"></i>
+                        </div>
                         <h3>Produits Frais</h3>
                         <p>Des produits locaux et de saison</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="feature-card text-center p-4">
-                        <i class="fas fa-handshake fa-3x mb-3 text-success"></i>
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-handshake fa-2x text-success"></i>
+                        </div>
                         <h3>Circuit Court</h3>
                         <p>Directement du producteur au consommateur</p>
                     </div>
@@ -403,6 +408,7 @@
                                     </a>
                                     <form action="{{ route('cart.add', $product) }}" method="POST" class="d-inline">
                                         @csrf
+                                        <input type="hidden" name="quantity" value="1">
                                         <button type="submit" class="btn btn-success">
                                             <i class="fas fa-shopping-cart"></i>
                                         </button>

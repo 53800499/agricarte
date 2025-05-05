@@ -165,6 +165,7 @@
                                     </a>
                                     <form action="{{ route('cart.add', $product) }}" method="POST" class="d-inline">
                                         @csrf
+                                        <input type="hidden" name="quantity" value="1">
                                         <button type="submit" class="btn btn-success">
                                             <i class="fas fa-shopping-cart"></i>
                                         </button>

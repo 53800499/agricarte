@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,8 @@ class UserSettingController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('settings.index', compact('user'));
+        $settings = $user->userSettings ?? new Setting();
+        return view('settings.index', compact('user', 'settings'));
     }
 
     /**
@@ -43,7 +45,8 @@ class UserSettingController extends Controller
             $validated['profile_image'] = $path;
         }
 
-        $user->update($validated);
+        $user->fill($validated);
+        $user->save();
 
         return back()->with('success', 'Profil mis à jour avec succès.');
     }
@@ -58,9 +61,9 @@ class UserSettingController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        Auth::user()->update([
-            'password' => Hash::make($validated['password']),
-        ]);
+        $user = Auth::user();
+        $user->password = Hash::make($validated['password']);
+        $user->save();
 
         return back()->with('success', 'Mot de passe mis à jour avec succès.');
     }
@@ -76,10 +79,10 @@ class UserSettingController extends Controller
             'marketing_emails' => ['boolean'],
         ]);
 
-        $settings = Auth::user()->settings ?? [];
-        $settings['notifications'] = $validated;
-
-        Auth::user()->update(['settings' => $settings]);
+        $user = Auth::user();
+        $settings = $user->userSettings ?? new Setting(['user_id' => $user->id]);
+        $settings->notifications = $validated;
+        $settings->save();
 
         return back()->with('success', 'Préférences de notification mises à jour avec succès.');
     }
@@ -95,10 +98,10 @@ class UserSettingController extends Controller
             'show_address' => ['boolean'],
         ]);
 
-        $settings = Auth::user()->settings ?? [];
-        $settings['privacy'] = $validated;
-
-        Auth::user()->update(['settings' => $settings]);
+        $user = Auth::user();
+        $settings = $user->userSettings ?? new Setting(['user_id' => $user->id]);
+        $settings->privacy = $validated;
+        $settings->save();
 
         return back()->with('success', 'Paramètres de confidentialité mis à jour avec succès.');
     }
@@ -112,20 +115,12 @@ class UserSettingController extends Controller
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = Auth::user();
+        $user = $request->user();
 
-        // Supprimer l'image de profil si elle existe
-        if ($user->profile_image) {
-            Storage::disk('public')->delete($user->profile_image);
-        }
-
-        // Déconnecter l'utilisateur
         Auth::logout();
 
-        // Supprimer l'utilisateur
         $user->delete();
 
-        // Invalider la session
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
