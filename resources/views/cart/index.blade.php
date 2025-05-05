@@ -45,11 +45,14 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white fw-semibold fs-5">
+                         Produits
+                    </div>
                     <div class="card-body">
                         @foreach($cart as $id => $item)
                             <div class="row align-items-center mb-4 pb-4 border-bottom">
                                 <div class="col-md-2">
-                                    <img src="{{ $item['image'] ? asset('storage/' . $item['image']) : asset('images/default-product.jpg') }}"
+                                    <img src="{{ $item['image'] ? asset('storage/products/' . $item['image']) : asset('images/default-product.jpg') }}"
                                          alt="{{ $item['name'] }}"
                                          class="img-fluid rounded">
                                 </div>
@@ -91,8 +94,10 @@
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white fw-semibold fs-5">
+                        Récapitulatif
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title mb-4">Récapitulatif</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <span>Sous-total</span>
                             <span>{{ number_format($total, 2) }}€</span>

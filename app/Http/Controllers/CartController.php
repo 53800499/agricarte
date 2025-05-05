@@ -42,7 +42,6 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
-        Log::info($cart);
 
         return redirect()->back()->with('success', 'Produit ajouté au panier avec succès.');
     }
