@@ -209,15 +209,11 @@ class ProductControllers extends Controller
                     'product' => $product
                 ]);
             }
-            if (auth()->user()->role == 'admin') {
-                $route = route('admin.products.index');
+            if (auth()->check() && auth()->user()->role === 'admin') {
+                return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour avec succès.');
             } else {
-                $route = route('farmer.products.index');
+                return redirect()->route('farmer.products.index')->with('success', 'Produit mis à jour avec succès.');
             }
-
-
-            return redirect()->$route->with('success', 'Produit ajouté avec succès.');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);
             if ($request->ajax() || $request->wantsJson()) {
@@ -389,13 +385,11 @@ class ProductControllers extends Controller
                 ]);
             }
 
-            if (auth()->user()->role == 'admin') {
-                $route = route('admin.products.index');
+            if (auth()->check() && auth()->user()->role === 'admin') {
+                return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour avec succès.');
             } else {
-                $route = route('farmer.products.index');
+                return redirect()->route('farmer.products.index')->with('success', 'Produit mis à jour avec succès.');
             }
-
-            return redirect($route)->with('success', 'Produit mis à jour avec succès.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -429,6 +423,6 @@ class ProductControllers extends Controller
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Produit supprimé avec succès.');
+        return redirect()->back()->with('success', 'Produit supprimé avec succès.');
     }
 }

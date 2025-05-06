@@ -4,15 +4,15 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">{{ isset($order) ? 'Modifier la Commande #' . $order->id : 'Nouvelle Commande' }}</h1>
         <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.index') : route('farmer.orders.index') }}" class="btn btn-secondary btn-icon-split">
             <span class="icon text-white-50">
                 <i class="fas fa-arrow-left"></i>
             </span>
             <span class="text">Retour</span>
-        </a>
-    </div>
+                </a>
+            </div>
 
     <div class="card shadow-lg border-0 rounded-lg animate__animated animate__fadeIn">
         <div class="card-header bg-gradient-primary text-white py-3">
@@ -86,9 +86,9 @@
                                             @enderror --}}
                                         </div>
                                     </div>
-                                @endif
+                @endif
 
-                                <div class="mb-3">
+                <div class="mb-3">
                                     <label for="payment_method" class="form-label">Méthode de paiement</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light">
@@ -106,7 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                </div>
 
                     <!-- Adresses -->
                     <div class="col-md-6">
@@ -117,7 +117,7 @@
                                 </h6>
                             </div>
                             <div class="card-body">
-                                <div class="mb-3">
+                <div class="mb-3">
                                     <label for="shipping_address" class="form-label">Adresse</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light">
@@ -132,7 +132,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                </div>
 
                     <div class="col-md-6">
                         <div class="card h-100 border-0 shadow-sm">
@@ -142,7 +142,7 @@
                                 </h6>
                             </div>
                             <div class="card-body">
-                                <div class="mb-3">
+                <div class="mb-3">
                                     <label for="billing_address" class="form-label">Adresse</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light">
@@ -226,7 +226,7 @@
                                                                         {{ $product->name }} ({{ number_format($product->price, 2) }} FCFA)
                                                                     </option>
                                                                 @endforeach
-                                                            </select>
+                    </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-5">
