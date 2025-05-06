@@ -71,7 +71,7 @@
                             </td>
                             <td>{{ $product->name }}</td>
                             <td>{{ Str::limit($product->description, 50) }}</td>
-                            <td>{{ number_format($product->price, 2) }}€</td>
+                            <td>{{ number_format($product->price, 2) }}FCFA</td>
                             <td>{{ $product->farmer->name }}</td>
                             <td>
                                 <button class="btn btn-sm btn-primary me-2" onclick="editProduct({{ $product->id }})">
@@ -121,7 +121,7 @@
                         <label for="price" class="form-label">Prix</label>
                         <div class="input-group">
                             <input type="number" step="0.01" class="form-control" id="price" name="price" required>
-                            <span class="input-group-text">€</span>
+                            <span class="input-group-text">FCFA</span>
                         </div>
                     </div>
                     <div class="mb-3">

@@ -56,7 +56,7 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="card-text text-success fw-bold">{{ number_format($product->price, 2) }}€ / {{ $product->unit }}</p>
+                            <p class="card-text text-success fw-bold">{{ number_format($product->price, 2) }}FCFA / {{ $product->unit }}</p>
                             <p class="text-muted small">
                                 <i class="fas fa-map-marker-alt me-1"></i>
                                 {{ $product->user->address }}

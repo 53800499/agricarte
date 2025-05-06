@@ -401,7 +401,7 @@
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text text-muted">{{ Str::limit($product->description, 100) }}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="h5 mb-0 text-success">{{ number_format($product->price, 2) }} €</span>
+                                <span class="h5 mb-0 text-success">{{ number_format($product->price, 2) }} FCFA</span>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('products.show', $product) }}" class="btn btn-outline-success">
                                         <i class="fas fa-eye"></i>
@@ -642,7 +642,7 @@
                         <p><i class="fas fa-map-marker-alt"></i> ${producer.address}</p>
                         <div class="products">
                             ${producer.products.map(product => `
-                                <span>${product.name} (${product.price}€/${product.unit})</span>
+                                <span>${product.name} (${product.price}FCFA/${product.unit})</span>
                             `).join('')}
                         </div>
                     </div>

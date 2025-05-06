@@ -138,7 +138,7 @@
                     <!-- Card Header -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Commandes récentes</h6>
-                        <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-primary">Voir tout</a>
+                        <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.index') : route('farmer.orders.index')}}" class="btn btn-sm btn-primary">Voir tout</a>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
@@ -159,7 +159,7 @@
                                         <tr>
                                             <td>#{{ $order->id }}</td>
                                             <td>{{ $order->user->name }}</td>
-                                            <td>{{ number_format($order->total, 2, ',', ' ') }} €</td>
+                                            <td>{{ number_format($order->total, 2, ',', ' ') }} FCFA</td>
                                             <td>
                                                 <span class="badge bg-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning' : 'info') }}">
                                                     {{ ucfirst($order->status) }}
@@ -167,7 +167,7 @@
                                             </td>
                                             <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                             <td>
-                                                <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-info">
+                                                <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.show', $order->id) : route('farmer.orders.show', $order->id)}}" class="btn btn-sm btn-info">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>

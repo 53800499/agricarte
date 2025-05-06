@@ -82,7 +82,7 @@
                                 <small class="text-muted">Commandes</small>
                             </div>
                             <div class="col-4">
-                                <h4 class="mb-0">{{ $farmer->revenue ?? '0 €' }}</h4>
+                                <h4 class="mb-0">{{ $farmer->revenue ?? '0 FCFA' }}</h4>
                                 <small class="text-muted">Revenus</small>
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                                         @foreach($farmer->products->take(5) as $product)
                                             <tr>
                                                 <td>{{ $product->name }}</td>
-                                                <td>{{ $product->price }} €</td>
+                                                <td>{{ $product->price }} FCFA</td>
                                                 <td>{{ $product->stock_quantity }}</td>
                                                 <td>
                                                     <span class="badge {{ $product->is_featured ? 'bg-success' : 'bg-danger' }}">

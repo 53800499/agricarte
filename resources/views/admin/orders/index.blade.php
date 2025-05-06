@@ -63,7 +63,7 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Liste des Commandes</h5>
-            {{-- <a href="{{ route('orders.create') }}" class="btn btn-primary">
+            {{-- <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.create') : route('farmer.orders.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-2"></i>Nouvelle Commande
             </a> --}}
         </div>
@@ -159,13 +159,13 @@
                                 <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-info" title="Voir">
+                                        <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.show', $order) : route('farmer.orders.show', $order) }}" class="btn btn-sm btn-outline-info" title="Voir">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('orders.edit', $order) }}" class="btn btn-sm btn-outline-primary" title="Modifier">
+                                        <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.edit', $order) : route('farmer.orders.edit', $order) }}" class="btn btn-sm btn-outline-primary" title="Modifier">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('orders.destroy', $order) }}" method="POST" class="d-inline">
+                                        <form action="{{ Auth()->user()->role=='admin' ? route('admin.orders.destroy', $order) : route('farmer.orders.destroy', $order) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer"

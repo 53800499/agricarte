@@ -46,7 +46,7 @@
                                     </span>
                                 </div>
                                 <div class="mb-3">
-                                    <h4 class="text-primary">{{ number_format($product->price, 2) }} €</h4>
+                                    <h4 class="text-primary">{{ number_format($product->price, 2) }} FCFA</h4>
                                 </div>
                                 <div class="mb-3">
                                     <p class="text-muted">{{ $product->description }}</p>

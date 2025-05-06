@@ -99,7 +99,7 @@
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="text-muted small mb-2">{{ $product->category->name ?? 'Non catégorisé' }}</p>
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="h5 text-primary mb-0">{{ number_format($product->price ?? 0, 2) }}€</span>
+                            <span class="h5 text-primary mb-0">{{ number_format($product->price ?? 0, 2) }}FCFA</span>
                             <span class="badge bg-{{ ($product->stock_quantity ?? 0) > 0 ? 'success' : 'danger' }}">
                                 {{ ($product->stock_quantity ?? 0) > 0 ? 'En stock' : 'Rupture' }}
                             </span>

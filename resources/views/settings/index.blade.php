@@ -1,8 +1,37 @@
 @extends('layouts.app')
 
 @section('title', 'Paramètres du compte')
-
+@push('styles')
+    <style>
+        .product-hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/slide1.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        color: white;
+        margin-top: -76px;
+    }
+        @media (max-width: 768px) {
+        .product-hero {
+            min-height: 200px;
+        }
+    }
+    </style>
+@endpush
 @section('content')
+<!-- Hero Section -->
+    <section class="product-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown">Mon profile</h1>
+                    <p class="lead animate__animated animate__fadeInUp">Tous ce qui me concerne</p>
+                </div>
+            </div>
+        </div>
+    </section>
 <div class="container py-5">
     <div class="row">
         <div class="col-md-3">

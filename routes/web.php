@@ -25,6 +25,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrdersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -233,8 +234,12 @@ Route::middleware(['auth', 'farmer'])->prefix('farmer')->name('farmer.')->group(
 
     // Commandes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     // Profil
     Route::get('/profile', [FarmerController::class, 'show'])->name('profile');
@@ -243,13 +248,10 @@ Route::middleware(['auth', 'farmer'])->prefix('farmer')->name('farmer.')->group(
 
 // Routes pour les commandes
 Route::middleware('auth')->group(function () {
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-    Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
-    Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
-    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+     // Commandes
+    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrdersController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}', [OrdersController::class, 'update'])->name('orders.update');
 
     // Routes de commande
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');

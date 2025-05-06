@@ -22,7 +22,7 @@
                 <form action="{{ Auth()->user()->role=='admin' ? route('admin.products.update', $product) : route('farmer.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     @method('PUT')
-
+                    <input type="hidden" name="user_id" value="{{ Auth()->user()->id }}">
                     <div class="row g-4">
                         <!-- Informations de base -->
                         <div class="col-md-6">
@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="price" class="form-label">Prix unitaire (€)</label>
+                                        <label for="price" class="form-label">Prix unitaire (FCFA)</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light">
                                                 <i class="fas fa-euro-sign"></i>

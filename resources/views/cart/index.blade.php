@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <h5 class="mb-1">{{ $item['name'] }}</h5>
-                                    <p class="text-muted mb-0">{{ number_format($item['price'], 2) }}€ / {{ $item['unit'] }}</p>
+                                    <p class="text-muted mb-0">{{ number_format($item['price'], 2) }}FCFA / {{ $item['unit'] }}</p>
                                 </div>
                                 <div class="col-md-3">
                                     <form action="{{ route('cart.update', $id) }}" method="POST" class="d-flex align-items-center">
@@ -76,7 +76,7 @@
                                     </form>
                                 </div>
                                 <div class="col-md-2 text-end">
-                                    <p class="mb-0 fw-bold">{{ number_format($item['price'] * $item['quantity'], 2) }}€</p>
+                                    <p class="mb-0 fw-bold">{{ number_format($item['price'] * $item['quantity'], 2) }}FCFA</p>
                                 </div>
                                 <div class="col-md-1 text-end">
                                     <form action="{{ route('cart.remove', $id) }}" method="POST">
@@ -100,7 +100,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
                             <span>Sous-total</span>
-                            <span>{{ number_format($total, 2) }}€</span>
+                            <span>{{ number_format($total, 2) }}FCFA</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <span>Frais de livraison</span>
@@ -109,7 +109,7 @@
                         <hr>
                         <div class="d-flex justify-content-between mb-4">
                             <span class="fw-bold">Total</span>
-                            <span class="fw-bold">{{ number_format($total, 2) }}€</span>
+                            <span class="fw-bold">{{ number_format($total, 2) }}FCFA</span>
                         </div>
                         <a href="{{ route('checkout.index') }}" class="btn btn-success w-100 mb-3">
                             <i class="fas fa-shopping-bag me-2"></i>Passer la commande

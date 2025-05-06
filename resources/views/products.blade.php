@@ -215,7 +215,7 @@
                             <span class="badge bg-success mb-2">{{ $product['category'] }}</span>
                             <h5 class="card-title">{{ $product['name'] }}</h5>
                             <p class="card-text">
-                                <strong>{{ $product['price'] }} €/{{ $product['unit'] }}</strong><br>
+                                <strong>{{ $product['price'] }} FCFA/{{ $product['unit'] }}</strong><br>
                                 <small class="text-muted">{{ $product['producer'] }}</small>
                             </p>
                         </div>

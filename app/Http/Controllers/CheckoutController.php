@@ -58,7 +58,7 @@ class CheckoutController extends Controller
                 'billing_address' => $request->billing_address,
                 'payment_method' => $request->payment_method,
                 'status' => 'pending',
-                'total_amount' => 0
+                'total' => 0
             ]);
 
             $totalAmount = 0;
@@ -85,7 +85,7 @@ class CheckoutController extends Controller
                 }
             }
 
-            $order->update(['total_amount' => $totalAmount]);
+            $order->update(['total' => $totalAmount]);
 
             // Vider le panier
             session()->forget('cart');

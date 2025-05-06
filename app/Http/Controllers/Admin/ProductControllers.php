@@ -209,8 +209,14 @@ class ProductControllers extends Controller
                     'product' => $product
                 ]);
             }
+            if (auth()->user()->role == 'admin') {
+                $route = route('admin.products.index');
+            } else {
+                $route = route('farmer.products.index');
+            }
+            
 
-            return redirect()->route('admin.products.index')->with('success', 'Produit ajouté avec succès.');
+            return redirect()->$route->with('success', 'Produit ajouté avec succès.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -315,7 +321,7 @@ class ProductControllers extends Controller
                 try {
                     // Supprimer l'ancienne image si elle existe
                     if ($product->image && Storage::exists('public/' . $product->image)) {
-                        Storage::delete('public/' . $product->image);
+                            Storage::delete('public/products/' . $product->image);
                     }
 
                     $image = $request->file('image');
@@ -367,6 +373,10 @@ class ProductControllers extends Controller
                 }
                 $validated['additional_images'] = json_encode($additionalImages);
             }
+            if (!isset($validated['image'])) {
+                $validated['image'] = $product->image;
+            }
+
 
             // Mise à jour du produit
             $product->update($validated);
@@ -379,7 +389,13 @@ class ProductControllers extends Controller
                 ]);
             }
 
-            return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour avec succès.');
+            if (auth()->user()->role == 'admin') {
+                $route = route('admin.products.index');
+            } else {
+                $route = route('farmer.products.index');
+            }
+
+            return redirect()->$route->with('success', 'Produit mis à jour avec succès.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);

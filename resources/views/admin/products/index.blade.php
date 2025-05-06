@@ -119,7 +119,7 @@
                                     @if(auth()->user()->role === 'admin')
                                         <td>{{ $product->user->name }}</td>
                                     @endif
-                                    <td>{{ number_format($product->price, 2, ',', ' ') }} €</td>
+                                    <td>{{ number_format($product->price, 2, ',', ' ') }} FCFA</td>
                                     <td>{{ $product->stock_quantity }} {{ $product->unit }}</td>
                                     <td>
                                         <span class="badge {{ $product->is_featured ? 'bg-success' : 'bg-danger' }}">

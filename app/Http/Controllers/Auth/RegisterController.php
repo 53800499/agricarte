@@ -58,11 +58,11 @@ class RegisterController extends Controller
                 'last_login_at' => now(),
             ]);
 
-            event(new Registered($user));
+            //event(new Registered($user));
 
-            Auth::login($user);
+            //Auth::login($user);
 
-            return redirect()->route($request->role === 'farmer' ? 'dashboard' : 'home')
+            return redirect()->route( 'login')
                 ->with('success', 'Votre compte a été créé avec succès !');
         } catch (\Exception $e) {
             return back()
@@ -70,4 +70,4 @@ class RegisterController extends Controller
                 ->withInput();
         }
     }
-}
+}/* 1234567890A */

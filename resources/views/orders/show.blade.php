@@ -1,20 +1,46 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Détails de la Commande - AgriCarte')
-
+@push('styles')
+    <style>
+        .contact-hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/slide1.jpg');
+        background-size: cover;
+        background-position: center;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        color: white;
+        margin-top: -76px;
+    }
+        @media (max-width: 768px) {
+        .contact-hero {
+            min-height: 200px;
+        }
+    }
+    </style>
+@endpush
 @section('content')
-<div class="container">
+<!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown">Commande</h1>
+                    <p class="lead animate__animated animate__fadeInUp">Voici les details de ta commande</p>
+                </div>
+            </div>
+        </div>
+    </section>
+<div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 fw-bold text-dark">Commande #{{ $order->id }}</h1>
         <div>
-            <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.edit',$order->id) : route('farmer.orders.edit',$order->id) }}" class="btn btn-primary me-2">
+            {{-- <a href="{{ route('orders.edit', $order) }}" class="btn btn-primary me-2">
                 <i class="bi bi-pencil-square me-1"></i> Modifier
-            </a>
-            <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.index') : route('farmer.orders.index') }}" class="btn btn-secondary btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-arrow-left"></i>
-                </span>
-                <span class="text">Retour</span>
+            </a> --}}
+            <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Retour
             </a>
         </div>
     </div>
@@ -91,7 +117,7 @@
         <!-- Infos client -->
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white fw-semibold fs-5">Client</div>
+                <div class="card-header bg-white fw-semibold fs-5">Producteur</div>
                 <div class="card-body">
                     <p class="mb-2"><strong>Nom :</strong> {{ $order->user->name }}</p>
                     <p class="mb-2"><strong>Email :</strong> {{ $order->user->email }}</p>

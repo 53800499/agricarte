@@ -1,14 +1,44 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', isset($order) ? 'Modifier la Commande - AgriCarte' : 'Nouvelle Commande - AgriCarte')
 
+@push('style')
+    <style>
+        .contact-hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/slide1.jpg');
+        background-size: cover;
+        background-position: center;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        color: white;
+        margin-top: -76px;
+    }
+        @media (max-width: 768px) {
+        .contact-hero {
+            min-height: 200px;
+        }
+    }
+    </style>
+@endpush
 @section('content')
+<!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown">Modifier la commande</h1>
+                    <p class="lead animate__animated animate__fadeInUp">La modification de la commande est valide jusqu'à 30minute après avoir passer la commande</p>
+                </div>
+            </div>
+        </div>
+    </section>
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-800">
             {{ isset($order) ? 'Modifier la Commande #' . $order->id : 'Nouvelle Commande' }}
         </h1>
-        <a href="{{ Auth()->user()->role=='admin' ? route('admin.orders.index') : route('farmer.orders.index') }}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
+        <a href="{{ route('orders.index') }}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
             Retour
         </a>
     </div>
