@@ -24,6 +24,9 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'is_active' => $request->has('is_active'),
+        ]);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories',
@@ -58,6 +61,9 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
+        $request->merge([
+            'is_active' => $request->has('is_active'),
+        ]);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug,' . $category->id,
