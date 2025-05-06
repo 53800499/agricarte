@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Modifier l\'Agriculteur')
+@section('title', 'Modifier Producteur')
 
 @section('content')
     <div class="container-fluid px-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Modifier l'Agriculteur</h1>
+            <h1 class="h3 mb-0 text-gray-800">Modifier Producteur</h1>
             <a href="{{ route('admin.farmers.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Retour
             </a>

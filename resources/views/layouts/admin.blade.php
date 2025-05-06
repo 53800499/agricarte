@@ -373,7 +373,7 @@
                         <a class="nav-link {{ request()->routeIs('admin.farmers.index') ? 'active bg-custom' : '' }}"
                             href="{{ route('admin.farmers.index') }}">
                             <i class="fas fa-fw fa-user-tie"></i>
-                            <span>Agriculteurs</span>
+                            <span>Producteurs</span>
                         </a>
                     </li>
 
@@ -467,7 +467,7 @@
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle" type="button" id="userDropdown"
                                 data-bs-toggle="dropdown">
-                                <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('images/default-avatar.png') }}"
+                                <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('images/profile.jpg') }}"
                                     alt="{{ Auth::user()->name }}" class="rounded-circle me-2" width="32"
                                     height="32">
                                 <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>

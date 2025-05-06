@@ -66,7 +66,7 @@
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('images/default-avatar.png') }}"
+                                <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('images/profile.jpg') }}"
                                      class="rounded-circle me-1" style="width: 30px; height: 30px; object-fit: cover;">
                                 {{ Auth::user()->name }}
                             </a>

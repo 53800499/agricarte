@@ -42,13 +42,9 @@
                             </h6>
                         </div>
                         <div class="card-body text-center">
-                            <div class="mb-3">
-                                <div class="position-relative d-inline-block">
-                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto"
-                                        style="width: 150px; height: 150px;">
-                                        <i class="fas fa-user fa-3x text-gray-400"></i>
-                                    </div>
-                                </div>
+                            <div class="text-center mb-3">
+                                <img id="preview" src="{{ asset('images/profile.jpg') }}" alt="Photo de profil"
+                                         class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
                             </div>
                             <div class="mb-3">
                                 <input type="file" class="form-control @error('profile_image') is-invalid @enderror"
@@ -298,6 +294,20 @@
                     farmerInfo.style.display = 'block';
                 }
 
+                // Prévisualisation de l'image
+                document.getElementById('profile_image').addEventListener('change', function(e) {
+                    const preview = document.getElementById('preview');
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                    }
+
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+                });
                 // Géolocalisation automatique
                 document.getElementById('address').addEventListener('blur', function() {
                     if (this.value && document.getElementById('role').value === 'farmer') {

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des Agriculteurs')
+@section('title', 'Gestion des Producteurs')
 
 @section('content')
     <div class="container-fluid px-4">
@@ -14,9 +14,9 @@
         @endforeach
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Gestion des Agriculteurs</h1>
+            <h1 class="h3 mb-0 text-gray-800">Gestion des Producteurs</h1>
             <a href="{{ route('admin.farmers.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Ajouter un agriculteur
+                <i class="fas fa-plus"></i> Ajouter un producteur
             </a>
         </div>
 
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <!-- Liste des agriculteurs -->
+        <!-- Liste des producteur -->
         <div class="card shadow mb-4">
             <div class="card-body">
                 <div class="table-responsive">
@@ -120,7 +120,7 @@
                                             <form action="{{ route('admin.farmers.destroy', $farmer) }}"
                                                   method="POST"
                                                   class="d-inline"
-                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet agriculteur ?');">
+                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet producteur ?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -133,7 +133,7 @@
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center">
-                                        Aucun agriculteur trouvé
+                                        Aucun producteur trouvé
                                     </td>
                                 </tr>
                             @endforelse

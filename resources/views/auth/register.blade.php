@@ -115,7 +115,7 @@
                                 name="role"
                                 required>
                             <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>Client</option>
-                            <option value="farmer" {{ old('role') == 'farmer' ? 'selected' : '' }}>Agriculteur</option>
+                            <option value="farmer" {{ old('role') == 'farmer' ? 'selected' : '' }}>Producteur</option>
                         </select>
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -281,7 +281,7 @@
 
                     <div class="mb-4">
                         <h6><i class="fas fa-handshake me-2"></i>2. Utilisation du service</h6>
-                        <p>Le service est destiné à mettre en relation les agriculteurs et les consommateurs. Vous vous engagez à fournir des informations exactes et à maintenir votre compte à jour. Tout usage frauduleux ou abusif pourra entraîner la suspension de votre compte.</p>
+                        <p>Le service est destiné à mettre en relation les producteurs et les consommateurs. Vous vous engagez à fournir des informations exactes et à maintenir votre compte à jour. Tout usage frauduleux ou abusif pourra entraîner la suspension de votre compte.</p>
                     </div>
 
                     <div class="mb-4">
@@ -316,7 +316,7 @@
         })
     })()
 
-    // Gestion de l'affichage des champs pour les agriculteurs
+    // Gestion de l'affichage des champs pour les prod
     document.getElementById('role').addEventListener('change', function() {
         const farmerFields = document.getElementById('farmerFields')
         if (this.value === 'farmer') {

@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Détails de l\'Agriculteur')
+@section('title', 'Détails du Producteur')
 
 @section('content')
     <div class="container-fluid px-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Détails de l'Agriculteur</h1>
+            <h1 class="h3 mb-0 text-gray-800">Détails du Producteur</h1>
             <div>
                 <a href="{{ route('admin.farmers.edit', $farmer) }}" class="btn btn-primary me-2">
                     <i class="fas fa-edit"></i> Modifier
@@ -40,7 +40,7 @@
                             <span class="badge {{ $farmer->is_active ? 'bg-success' : 'bg-danger' }} me-2">
                                 {{ $farmer->is_active ? 'Actif' : 'Inactif' }}
                             </span>
-                            <span class="badge bg-primary">Agriculteur</span>
+                            <span class="badge bg-primary">Producteur</span>
                         </div>
 
                         <hr>

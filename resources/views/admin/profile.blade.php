@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', "Profil de l'agriculteur")
+@section('title', "Profil du producteur")
 
 @section('content')
     <div class="container-fluid">
@@ -18,7 +18,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Mon profile</h1>
                 <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Modifier l'agriculteur
+                    <i class="fas fa-save"></i> Modifier producteur
                 </button>
             </div>
             <div class="row mb-4 gap-4">
@@ -27,7 +27,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="justify-content-center text-center my-1">
-                                <img src="{{ $user->profile_image ? asset('storage/profile_images/' . $user->profile_image) : asset('images/logo.jpg') }}"
+                                <img src="{{ $user->profile_image ? asset('storage/profile_images/' . $user->profile_image) : asset('images/profile.jpg') }}"
                                     alt="Photo de {{ $user->name }}" class="rounded img-thumbnail" width="150" height="150">
                             </div>
                             <input type="file" class="form-control @error('profile_image') is-invalid @enderror"

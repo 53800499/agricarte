@@ -18,6 +18,8 @@ return new class extends Migration
             $table->json('privacy')->nullable();
             $table->json('preferences')->nullable();
             $table->timestamps();
+            $table->string('key');
+            $table->text('value')->nullable();
         });
     }
 

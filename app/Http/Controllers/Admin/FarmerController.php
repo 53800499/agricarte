@@ -55,6 +55,9 @@ class FarmerController extends Controller
     {
         try {
             Log::info('Donnée: ', $request->all());
+            $request->merge([
+                'is_active' => $request->has('is_active'),
+            ]);
             // Validation des données
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -119,7 +122,7 @@ class FarmerController extends Controller
                 }
             }
 
-            return redirect()->route('farmers.index')->with('success', 'Agriculteur ajouté avec succès.');
+            return redirect()->route('admin.farmers.index')->with('success', 'Agriculteur ajouté avec succès.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -152,6 +155,9 @@ class FarmerController extends Controller
 
     public function update(Request $request, User $farmer)
     {
+        $request->merge([
+            'is_active' => $request->has('is_active'),
+        ]);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $farmer->id,

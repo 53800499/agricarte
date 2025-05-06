@@ -36,7 +36,7 @@ class UserController extends Controller
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
                 'phone' => ['nullable', 'string', 'max:20'],
                 'role' => ['required', 'string', 'in:user,farmer,admin'],
-                'is_active' => ['boolean'],
+                'is_active' => ['nullable'],
                 'address' => ['nullable', 'string', 'max:255'],
                 'description' => ['nullable', 'string'],
                 'latitude' => ['nullable', 'numeric', 'between:-90,90'],
@@ -44,18 +44,15 @@ class UserController extends Controller
                 'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048']
             ]);
 
-            Log::info($validated);
-
             // Création de l'utilisateur
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'phone' => $validated['phone'],
+                'phone' => $validated['phone'] ?? null,
                 'role' => $validated['role'],
-                'is_active' => $validated['is_active'] ?? true,
-                'address' => $validated['address'],
-                
+                'is_active' => $request->has('is_active'),
+                'address' => $validated['address'] ?? null,
             ]);
 
             // Gestion de l'image de profil
@@ -71,24 +68,18 @@ class UserController extends Controller
             // Si c'est un producteur, on ajoute les informations spécifiques
             if ($validated['role'] === 'farmer') {
                 $user->farmer()->create([
-                    'description' => $validated['description'],
-                    'latitude' => $validated['latitude'],
-                    'longitude' => $validated['longitude']
+                    'description' => $validated['description'] ?? null,
+                    'latitude' => $validated['latitude'] ?? null,
+                    'longitude' => $validated['longitude'] ?? null
                 ]);
             }
-
-            /* // Envoi d'un email de bienvenue
-            try {
-                Mail::to($user->email)->send(new WelcomeEmail($user));
-            } catch (\Exception $e) {
-                Log::error('Erreur lors de l\'envoi de l\'email de bienvenue: ' . $e->getMessage());
-            } */
 
             return redirect()
                 ->route('admin.users.index')
                 ->with('success', 'L\'utilisateur a été créé avec succès.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Erreur de validation: ' . json_encode($e->errors()));
             return redirect()
                 ->back()
                 ->withErrors($e->validator)
@@ -96,7 +87,6 @@ class UserController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Erreur lors de la création de l\'utilisateur: ' . $e->getMessage());
-
             return redirect()
                 ->back()
                 ->with('error', 'Une erreur est survenue lors de la création de l\'utilisateur.')
@@ -119,24 +109,14 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9\-\+\s\(\)]{10,20}$/'],
+            'phone' => ['nullable', 'string', 'max:20'],
             'role' => ['required', 'string', 'in:user,farmer,admin'],
-            'is_active' => ['boolean'],
+            'is_active' => ['nullable'],
             'password' => ['nullable', 'confirmed', Password::min(8)],
-
-            // Adresse
-            'address' => ['nullable', 'string', 'max:255'],/*
-            'password' => ['nullable', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-            'city' => ['nullable', 'string', 'max:100'],
-            'postal_code' => ['nullable', 'string', 'max:20'],
-            'country' => ['nullable', 'string', 'max:100'], */
-
-            // Informations du producteur
-            'description' => ['nullable', 'string', 'max:1000'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
-
-            // Photo de profil
             'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
@@ -145,29 +125,12 @@ class UserController extends Controller
         $user->email = $validated['email'];
         $user->phone = $validated['phone'];
         $user->role = $validated['role'];
-        $user->is_active = $validated['is_active'] ?? true;
+        $user->is_active = $request->has('is_active');
+        $user->address = $validated['address'];
 
         // Mise à jour du mot de passe si fourni
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
-        }
-
-        // Mise à jour de l'adresse
-        $user->address = $validated['address'];
-        /* $user->city = $validated['city'];
-        $user->postal_code = $validated['postal_code'];
-        $user->country = $validated['country']; */
-
-        // Mise à jour des informations du producteur
-        if ($validated['role'] === 'farmer') {
-            $user->description = $validated['description'];
-            $user->latitude = $validated['latitude'];
-            $user->longitude = $validated['longitude'];
-        } else {
-            // Si le rôle change et n'est plus farmer, on efface les informations spécifiques
-            $user->description = null;
-            $user->latitude = null;
-            $user->longitude = null;
         }
 
         // Gestion de la photo de profil
@@ -184,6 +147,23 @@ class UserController extends Controller
 
         $user->save();
 
+        // Mise à jour des informations du producteur
+        if ($validated['role'] === 'farmer') {
+            if ($user->farmer) {
+                $user->farmer->update([
+                    'description' => $validated['description'],
+                    'latitude' => $validated['latitude'],
+                    'longitude' => $validated['longitude']
+                ]);
+            } else {
+                $user->farmer()->create([
+                    'description' => $validated['description'],
+                    'latitude' => $validated['latitude'],
+                    'longitude' => $validated['longitude']
+                ]);
+            }
+        }
+
         return redirect()
             ->route('admin.users.index')
             ->with('success', 'L\'utilisateur a été mis à jour avec succès.');
@@ -192,8 +172,8 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-
-        return redirect()->route('users.index')
+        return redirect()
+            ->route('admin.users.index')
             ->with('success', 'Utilisateur supprimé avec succès');
     }
 }
