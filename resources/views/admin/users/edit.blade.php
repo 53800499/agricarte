@@ -232,7 +232,7 @@
                                         @enderror
                                     </div>
                                 </div>
-
+{{-- 
                                 <div class="col-md-6 mb-3">
                                     <label for="postal_code" class="form-label">Code postal</label>
                                     <div class="input-group">
@@ -257,7 +257,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

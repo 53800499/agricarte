@@ -214,7 +214,7 @@ class ProductControllers extends Controller
             } else {
                 $route = route('farmer.products.index');
             }
-            
+
 
             return redirect()->$route->with('success', 'Produit ajouté avec succès.');
 
@@ -395,7 +395,7 @@ class ProductControllers extends Controller
                 $route = route('farmer.products.index');
             }
 
-            return redirect()->$route->with('success', 'Produit mis à jour avec succès.');
+            return redirect($route)->with('success', 'Produit mis à jour avec succès.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);

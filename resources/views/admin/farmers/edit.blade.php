@@ -117,8 +117,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-md-6">
+                                    {{-- <div class="row">
+                                        <div class="col-md-6"> --}}
                                             <div class="mb-3">
                                                 <label for="city" class="form-label">Ville</label>
                                                 <div class="input-group">
@@ -132,7 +132,7 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                        </div>
+                                         {{--</div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="postal_code" class="form-label">Code postal</label>
@@ -147,10 +147,10 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </div> 
+                                    </div>--}}
 
-                                    <div class="mb-3">
+                                    {{-- <div class="mb-3">
                                         <label for="country" class="form-label">Pays</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light">
@@ -162,7 +162,7 @@
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="row">
                                         <div class="col-md-6">

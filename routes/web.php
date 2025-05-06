@@ -158,12 +158,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('farmer')->middleware('farmer')->group(function () {
         // Produits de l'agriculteur
         Route::get('/products', [ProductControllers::class, 'index'])->name('farmer.products.index');
-        Route::get('/products/create', [ProductController::class, 'create'])->name('farmer.products.create');
-        Route::post('/products', [ProductController::class, 'store'])->name('farmer.products.store');
+        Route::get('/products/create', [ProductControllers::class, 'create'])->name('farmer.products.create');
+        Route::post('/products', [ProductControllers::class, 'store'])->name('farmer.products.store');
         Route::get('/products/{product}', [ProductControllers::class, 'show'])->name('farmer.products.show');
-        Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('farmer.products.edit');
-        Route::put('/products/{product}', [ProductController::class, 'update'])->name('farmer.products.update');
-        Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('farmer.products.destroy');
+        Route::get('/products/{product}/edit', [ProductControllers::class, 'edit'])->name('farmer.products.edit');
+        Route::put('/products/{product}', [ProductControllers::class, 'update'])->name('farmer.products.update');
+        Route::delete('/products/{product}', [ProductControllers::class, 'destroy'])->name('farmer.products.destroy');
 
         // Commandes de l'agriculteur
         Route::get('/orders', [OrderController::class, 'index'])->name('farmer.orders.index');

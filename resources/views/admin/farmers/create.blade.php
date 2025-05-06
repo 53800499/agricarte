@@ -181,7 +181,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                {{-- <div class="col-md-6 mb-3">
                                     <label for="postal_code" class="form-label">Code postal</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-mail-bulk"></i></span>
@@ -202,7 +202,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
