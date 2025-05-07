@@ -67,7 +67,7 @@ class UserController extends Controller
 
             // Si c'est un producteur, on ajoute les informations spécifiques
             if ($validated['role'] === 'farmer') {
-                $user->farmer()->create([
+                $user->create([
                     'description' => $validated['description'] ?? null,
                     'latitude' => $validated['latitude'] ?? null,
                     'longitude' => $validated['longitude'] ?? null
@@ -148,21 +148,14 @@ class UserController extends Controller
         $user->save();
 
         // Mise à jour des informations du producteur
-        if ($validated['role'] === 'farmer') {
-            if ($user->farmer) {
-                $user->farmer->update([
-                    'description' => $validated['description'],
-                    'latitude' => $validated['latitude'],
-                    'longitude' => $validated['longitude']
-                ]);
-            } else {
-                $user->farmer()->create([
-                    'description' => $validated['description'],
-                    'latitude' => $validated['latitude'],
-                    'longitude' => $validated['longitude']
-                ]);
+            if ($validated['role'] === 'farmer') {
+                    $user->update([
+                        'description' => $validated['description'],
+                        'latitude' => $validated['latitude'],
+                        'longitude' => $validated['longitude']
+                    ]);
+
             }
-        }
 
         return redirect()
             ->route('admin.users.index')

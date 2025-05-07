@@ -22,7 +22,7 @@
                         <div class="col-md-6">
                             <div class="card mb-4">
                                 <div class="card-header">
-                                    <h6 class="mb-0">Informations personnelles</h6>
+                                    <h6 class="mb-0 text-primary">Informations personnelles</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -100,7 +100,7 @@
                         <div class="col-md-6">
                             <div class="card mb-4">
                                 <div class="card-header">
-                                    <h6 class="mb-0">Adresse et localisation</h6>
+                                    <h6 class="mb-0 text-primary">Adresse et localisation</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -204,7 +204,7 @@
                         <div class="col-12">
                             <div class="card mb-4">
                                 <div class="card-header">
-                                    <h6 class="mb-0">Informations supplémentaires</h6>
+                                    <h6 class="mb-0 text-primary">Informations supplémentaires</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">

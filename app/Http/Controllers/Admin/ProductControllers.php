@@ -209,10 +209,14 @@ class ProductControllers extends Controller
                     'product' => $product
                 ]);
             }
-            if (auth()->check() && auth()->user()->role === 'admin') {
-                return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour avec succès.');
+
+            // Redirection basée sur le rôle de l'utilisateur
+            if (auth()->user()->role === 'admin') {
+                return redirect()->route('admin.products.index')
+                    ->with('success', 'Produit créé avec succès.');
             } else {
-                return redirect()->route('farmer.products.index')->with('success', 'Produit mis à jour avec succès.');
+                return redirect()->route('farmer.products.index')
+                    ->with('success', 'Produit créé avec succès.');
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);

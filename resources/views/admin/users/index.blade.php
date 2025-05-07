@@ -30,7 +30,7 @@
                                 <th>Email</th>
                                 <th>Rôle</th>
                                 <th>Téléphone</th>
-                                <th>Ville</th>
+                                <th>Adresse</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -57,7 +57,7 @@
                                         </span>
                                     </td>
                                     <td>{{ $user->phone ?? '-' }}</td>
-                                    <td>{{ $user->city ?? '-' }}</td>
+                                    <td>{{ $user->address ?? '-' }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <a href="{{ route('admin.users.show', $user) }}" class="btn btn-outline-info btn-sm">

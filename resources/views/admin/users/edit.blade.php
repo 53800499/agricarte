@@ -326,6 +326,33 @@
                 const farmerInfo = document.getElementById('farmer-info');
                 farmerInfo.style.display = this.value === 'farmer' ? 'block' : 'none';
             });
+            // Géolocalisation automatique
+                document.getElementById('address').addEventListener('blur', function() {
+                    if (this.value && document.getElementById('role').value === 'farmer') {
+                        const loadingIndicator = document.createElement('div');
+                        loadingIndicator.className = 'position-absolute end-0 top-50 translate-middle-y me-3';
+                        loadingIndicator.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"></div>';
+                        this.parentElement.appendChild(loadingIndicator);
+
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.value)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.length > 0) {
+                                    document.getElementById('latitude').value = data[0].lat;
+                                    document.getElementById('longitude').value = data[0].lon;
+                                    loadingIndicator.innerHTML = '<i class="fas fa-check text-success"></i>';
+                                    setTimeout(() => loadingIndicator.remove(), 2000);
+                                } else {
+                                    loadingIndicator.innerHTML = '<i class="fas fa-exclamation-triangle text-warning"></i>';
+                                    setTimeout(() => loadingIndicator.remove(), 2000);
+                                }
+                            })
+                            .catch(() => {
+                                loadingIndicator.innerHTML = '<i class="fas fa-times text-danger"></i>';
+                                setTimeout(() => loadingIndicator.remove(), 2000);
+                            });
+                    }
+                });
         </script>
     @endpush
 @endsection
