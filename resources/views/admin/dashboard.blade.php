@@ -7,13 +7,13 @@
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Tableau de bord</h1>
-            <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
+            <a href="{{ Auth()->user()->role=='admin' ? route('admin.products.create') : route('farmer.products.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Ajouter un produit
             </a>
         </div>
 
             @if(Auth::user()->role == 'admin')
-                
+
         <!-- Content Row -->
         <div class="row">
             <!-- Earnings (Monthly) Card -->
