@@ -144,8 +144,8 @@
                 <div class="col-lg-3 col-md-4">
                     <h5 class="mb-3">Contact</h5>
                     <ul class="list-unstyled text-muted">
-                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>123 Rue Exemple, Ville, Pays</li>
-                        <li class="mb-2"><i class="fas fa-phone me-2"></i>+33 1 23 45 67 89</li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>Avenue Bordeaux, Cotonou, Bénin</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i>+229 01 23 45 67 89</li>
                         <li class="mb-2"><i class="fas fa-envelope me-2"></i>contact@agricarte.com</li>
                     </ul>
                 </div>

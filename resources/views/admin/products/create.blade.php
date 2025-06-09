@@ -130,7 +130,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="price" class="form-label">Prix</label>
                                     <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-euro-sign"></i></span>
+                                        <span class="input-group-text"><i class="fas fa-money-bill-wavec"></i></span>
                                         <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror"
                                                id="price" name="price" value="{{ old('price') }}" required>
                                         @error('price')
